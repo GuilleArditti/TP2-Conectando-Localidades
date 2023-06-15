@@ -434,6 +434,7 @@ public class VentanaPrincipal implements ActionListener {
 		for(int i=0;i<conjuntoSolucion.size()-1;i++) {
 			MapPolygon conexion = new MapPolygonImpl(conjuntoSolucion.get(i),conjuntoSolucion.get(i),conjuntoSolucion.get(i+1));
 			mapa.addMapPolygon(conexion);
+			
 		}
 	}
 
