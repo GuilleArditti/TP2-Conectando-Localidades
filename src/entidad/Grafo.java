@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Grafo {
-	private int[][] matriz;
+	int[][] matriz;
 	private List<Arista> aristas;
 
 	public Grafo(int vertices) {
