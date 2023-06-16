@@ -37,19 +37,12 @@ public class LogicaAGM {
 	
 	public String darSolucionAGM() {
 		Grafo grafoOrigen = volcarListaAGrafo();
-		StringBuilder solucionTxt = new StringBuilder();
 		agm = algoritmoDePrim(grafoOrigen);
-		int costoTotal = 0;
-		
-		for (Arista arista : agm.getAristas()) {
-			costoTotal += arista.getPeso();
-			
-			solucionTxt.append(ubicaciones.get(arista.getOrigen()) + " -> "
-					+ ubicaciones.get(arista.getDestino()) + ". Costo: $ " + arista.getPeso() + "\n");
-		}
-		return solucionTxt + "Costo total de las instalaciones: $ " + costoTotal;
+		int costoTotal = calcularCostoTotal();
+		String solucionTxt = escribirSolucion(costoTotal);
+		return solucionTxt;
 	}
-
+	
 	public Grafo algoritmoDePrim(Grafo grafo) {
 		if (grafo == null)
 			throw new IllegalArgumentException("El Grafo es null.");
@@ -86,6 +79,24 @@ public class LogicaAGM {
 			}
 		}
 		return agm;
+	}
+	
+	private int calcularCostoTotal() {
+		int costoTotal = 0;
+		for (Arista arista : agm.getAristas())
+			costoTotal += arista.getPeso();
+		return costoTotal;
+	}
+	
+	private String escribirSolucion(int costoTotal) {
+		StringBuilder solucionTxt = new StringBuilder();
+		
+		for (Arista arista : agm.getAristas())
+			solucionTxt.append(ubicaciones.get(arista.getOrigen()) + " -> "
+					+ ubicaciones.get(arista.getDestino()) + ". Costo: $ " + arista.getPeso() + "\n");
+		
+		solucionTxt.append("Costo total de las instalaciones: $ " + costoTotal);
+		return solucionTxt.toString();
 	}
 
 	private void marcarVisitado(boolean[] verticesVisitados, Arista arista) {
