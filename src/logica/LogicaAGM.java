@@ -3,8 +3,6 @@ package logica;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openstreetmap.gui.jmapviewer.Coordinate;
-
 import entidad.Arista;
 import entidad.Grafo;
 import entidad.Planificador;
@@ -122,18 +120,15 @@ public class LogicaAGM {
 		return grafo;
 	}
 	
-	public List<Coordinate> solucion(){
-		List<Coordinate> conjuntoSolucion= new ArrayList<Coordinate>();
-		for(int i=0;i<agm.getAristas().size();i++) {
-			if(agm.getAristas().get(i).getPeso()!=0) {
-				conjuntoSolucion.add(new Coordinate(ubicaciones.get(i).getLatitud(), ubicaciones.get(i).getLongitud()));
-			}
-		}
-		return conjuntoSolucion;
-	}
-
 	public List<Ubicacion> getUbicaciones() {
 		return this.ubicaciones;
 	}
+	
+	public List<Arista> getAristasAGM() {
+	    if (agm == null)
+	      throw new RuntimeException("Todavia no se ha generado el Arbol");
+	    
+	    return agm.getAristas();
+	  }
 
 }

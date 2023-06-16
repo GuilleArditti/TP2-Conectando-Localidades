@@ -43,18 +43,18 @@ public class Planificador {
 	public int calcularCostoEntrelocalidades(Ubicacion ubicacion1, Ubicacion ubicacion2) {
 		double distancia= obtenerDistanciaEnKms(ubicacion1.getLatitud(), ubicacion1.getLongitud(),ubicacion2.getLatitud(),ubicacion2.getLongitud());
 		if (distancia > 300 && ubicacion1.getProvincia().equals(ubicacion2.getProvincia())) {
-			return (int) (distancia * (costoPorKilometro
-					+ costoPorKilometro * (porcentajeDeAumento * 0.01)));
+			return (int) (distancia * (getCostoPorKilometro()
+					+ getCostoPorKilometro() * (getPorcentajeDeAumento() * 0.01)));
 		}
 		if (distancia < 300 && ubicacion1.getProvincia().equals(ubicacion2.getProvincia())) {
-			return (int) (distancia * costoPorKilometro);
+			return (int) (distancia * getCostoPorKilometro());
 		}
 		if (distancia > 300 && !ubicacion1.getProvincia().equals(ubicacion2.getProvincia())) {
-			return (int) (distancia* (costoPorKilometro+ (costoPorKilometro * (porcentajeDeAumento * 0.01)))
-							+ costoDistintaProvincia);
+			return (int) (distancia* (getCostoPorKilometro()+ (getCostoPorKilometro() * (getPorcentajeDeAumento() * 0.01)))
+							+ getCostoDistintaProvincia());
 		}
 		if (!ubicacion1.getProvincia().equals(ubicacion2.getProvincia())) {
-			return (int) (distancia * costoPorKilometro) + costoDistintaProvincia;
+			return (int) (distancia * getCostoPorKilometro()) + getCostoDistintaProvincia();
 		}
 		return 0;
 	}

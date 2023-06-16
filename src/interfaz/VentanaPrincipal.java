@@ -23,12 +23,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
@@ -37,6 +35,7 @@ import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
 
+import entidad.Arista;
 import entidad.Planificador;
 import entidad.Ubicacion;
 import logica.LogicaAGM;
@@ -52,11 +51,10 @@ public class VentanaPrincipal implements ActionListener {
 	private JPanel panelMapa;
 	private JPanel panelDeControl;
 	private JPanel panelDeCarga;
-	private JPanel panelTabla;
 	private JPanel panelInfo;
 	private JButton botonCarga;
 	private JButton botonGenerarConexiones;
-	private JTable tablaDeCostos;
+	private JButton botonCambiarCostos;
 	private JComboBox<String> listaDeProvincias;
 	private JList<String> listaNombreyProvincia;
 	private List<Coordinate> coordenadas;
@@ -70,6 +68,9 @@ public class VentanaPrincipal implements ActionListener {
 	
 	private List<Coordinate> conjuntoSolucion;
 	private JScrollPane panelDeControlDeslizable;
+	private JLabel campoCostoPorKM;
+	private JLabel campoConexion300KM;
+	private JLabel campoTasaInterProvincial;
 
 	public VentanaPrincipal() {
 		initialize();
@@ -138,101 +139,117 @@ public class VentanaPrincipal implements ActionListener {
 	
 	private void generarPanelDeControl() {
 
-		panelDeControlDeslizable= new JScrollPane();
-		panelDeControlDeslizable.setFont(new Font("Unispace", Font.BOLD, 11));
-		panelDeControlDeslizable.setBounds(501, 0, 583, 961);
-		panelDeControlDeslizable.setBackground(new Color(128, 128, 128));
-		panelDeControlDeslizable.setLayout(null);
-		panelDeControlDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		frame.getContentPane().add(panelDeControlDeslizable);
+//		panelDeControlDeslizable= new JScrollPane();
+//		panelDeControlDeslizable.setFont(new Font("Unispace", Font.BOLD, 11));
+//		panelDeControlDeslizable.setBounds(501, 0, 583, 961);
+//		panelDeControlDeslizable.setBackground(new Color(128, 128, 128));
+//		panelDeControlDeslizable.setLayout(null);
+//		panelDeControlDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//		frame.getContentPane().add(panelDeControlDeslizable);
 		
-//		panelDeControl = new JPanel();
-//		panelDeControl.setFont(new Font("Unispace", Font.BOLD, 11));
-//		panelDeControl.setBackground(new Color(128, 128, 128));
-//		panelDeControl.setBounds(501, 0, 583, 961);
-//		panelDeControl.setLayout(null);
-//		frame.getContentPane().add(panelDeControl);
+		panelDeControl = new JPanel();
+		panelDeControl.setFont(new Font("Unispace", Font.BOLD, 11));
+		panelDeControl.setBackground(new Color(128, 128, 128));
+		panelDeControl.setBounds(501, 0, 583, 961);
+		panelDeControl.setLayout(null);
+		frame.getContentPane().add(panelDeControl);
 
 		generarTitulo();
-		generarTablaCostos();
+		mostrarCostos();
 		generarPanelDeCarga();
 		generarListaNombreYProvincia();
 		generarBotonConexion();
 		generarPanelInfo();
 	}
 
-	private void generarPanelMapa() {
-		generarMapa();
-		panelMapa = new JPanel();
-		panelMapa.setForeground(new Color(128, 128, 128));
-		panelMapa.setBackground(new Color(128, 128, 128));
-		panelMapa.setBounds(0, 0, 499, 1000);
-		panelMapa.add(mapa);
-		frame.getContentPane().add(panelMapa);
-	}
-
 	private void generarTitulo() {
 		JTextField titulo = new JTextField();
+		titulo.setBorder(new LineBorder(new Color(171, 173, 179)));
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		titulo.setBackground(new Color(0, 128, 255));
 		titulo.setFont(new Font("Unispace", Font.BOLD, 27));
 		titulo.setText(" Conectando Localidades");
 		titulo.setBounds(21, 11, 531, 67);
 		titulo.setEditable(false);
-//		panelDeControl.add(titulo);
-		panelDeControlDeslizable.add(titulo);
+		panelDeControl.add(titulo);
+//		panelDeControlDeslizable.add(titulo);
 	}
 
-	@SuppressWarnings("serial")
-	private void generarTablaCostos() {
-
-		panelTabla = new JPanel();
-		panelTabla.setBackground(new Color(0, 0, 0));
-		panelTabla.setBounds(21, 111, 531, 59);
-		panelTabla.setLayout(null);
-		panelDeControlDeslizable.add(panelTabla);
-		
-
-		tablaDeCostos = new JTable() {
-			public boolean isCellEditable(int row, int col) {
-				return false;
-			}
-
-		};
-		tablaDeCostos.setFont(new Font("Unispace", Font.BOLD, 11));
-		tablaDeCostos.setRowSelectionAllowed(false);
-		tablaDeCostos.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tablaDeCostos.setModel(new DefaultTableModel(
-				new String[][] { { String.valueOf(planificador.getCostoPorKilometro()) + "$ ",
-						"+" + String.valueOf(planificador.getPorcentajeDeAumento()) + "%",
-						"+" + String.valueOf(planificador.getCostoDistintaProvincia() + "$") }, },
-				new String[] { "Costo KM", "Costo KM si conexión >300 KM", "Tasa Conexión InterProvincial" }));
-
-		JScrollPane scrollPane = new JScrollPane(tablaDeCostos);
-		scrollPane.setBackground(new Color(255, 255, 255));
-		scrollPane.setFont(new Font("Unispace", Font.BOLD, 11));
-		scrollPane.setBounds(0, 0, 531, 59);
-		panelTabla.add(scrollPane);
-
+	private void mostrarCostos() {
 		JLabel costos = new JLabel("Costos");
+		costos.setBorder(new LineBorder(new Color(0, 0, 0)));
 		costos.setHorizontalAlignment(SwingConstants.CENTER);
 		costos.setOpaque(true);
 		costos.setForeground(new Color(0, 0, 0));
 		costos.setBackground(new Color(128, 128, 255));
 		costos.setFont(new Font("Unispace", Font.BOLD, 17));
-		costos.setBounds(21, 89, 531, 23);
-//		panelDeControl.add(costos);
-		panelDeControlDeslizable.add(costos);
+		costos.setBounds(21, 97, 531, 23);
+		panelDeControl.add(costos);
+
+		JLabel etiquetaCostoXKM = new JLabel("Costo x KM");
+		etiquetaCostoXKM.setBorder(new LineBorder(new Color(0, 0, 0)));
+		etiquetaCostoXKM.setOpaque(true);
+		etiquetaCostoXKM.setFont(new Font("Unispace", Font.BOLD, 13));
+		etiquetaCostoXKM.setHorizontalAlignment(SwingConstants.CENTER);
+		etiquetaCostoXKM.setBounds(21, 115, 119, 28);
+		panelDeControl.add(etiquetaCostoXKM);
+
+		JLabel etiquetamayor300KM = new JLabel("Costo x KM si conexi\u00F3n >300 KM");
+		etiquetamayor300KM.setBorder(new LineBorder(new Color(0, 0, 0)));
+		etiquetamayor300KM.setOpaque(true);
+		etiquetamayor300KM.setFont(new Font("Unispace", Font.BOLD, 13));
+		etiquetamayor300KM.setHorizontalAlignment(SwingConstants.CENTER);
+		etiquetamayor300KM.setBounds(138, 115, 250, 28);
+		panelDeControl.add(etiquetamayor300KM);
+
+		JLabel etiquetaTasaProvincial = new JLabel("Tasa InterProvincial");
+		etiquetaTasaProvincial.setBorder(new LineBorder(new Color(0, 0, 0)));
+		etiquetaTasaProvincial.setOpaque(true);
+		etiquetaTasaProvincial.setFont(new Font("Unispace", Font.BOLD, 13));
+		etiquetaTasaProvincial.setHorizontalAlignment(SwingConstants.CENTER);
+		etiquetaTasaProvincial.setBounds(385, 115, 167, 28);
+		panelDeControl.add(etiquetaTasaProvincial);
+
+		campoCostoPorKM = new JLabel(String.valueOf(planificador.getCostoPorKilometro()) + "$");
+		campoCostoPorKM.setBorder(new LineBorder(new Color(0, 0, 0)));
+		campoCostoPorKM.setOpaque(true);
+		campoCostoPorKM.setHorizontalAlignment(SwingConstants.CENTER);
+		campoCostoPorKM.setBounds(21, 145, 119, 23);
+		panelDeControl.add(campoCostoPorKM);
+
+		campoConexion300KM = new JLabel(String.valueOf(planificador.getPorcentajeDeAumento())+ "$");
+		campoConexion300KM.setBorder(new LineBorder(new Color(0, 0, 0)));
+		campoConexion300KM.setOpaque(true);
+		campoConexion300KM.setHorizontalAlignment(SwingConstants.CENTER);
+		campoConexion300KM.setBounds(138, 145, 250, 23);
+		panelDeControl.add(campoConexion300KM);
+
+		campoTasaInterProvincial = new JLabel(String.valueOf(planificador.getCostoDistintaProvincia())+ "$");
+		campoTasaInterProvincial.setBorder(new LineBorder(new Color(0, 0, 0)));
+		campoTasaInterProvincial.setOpaque(true);
+		campoTasaInterProvincial.setHorizontalAlignment(SwingConstants.CENTER);
+		campoTasaInterProvincial.setBounds(385, 145, 167, 23);
+		panelDeControl.add(campoTasaInterProvincial);
+
+		botonCambiarCostos = new JButton("Cambiar costos");
+		botonCambiarCostos.setFont(new Font("Unispace", Font.BOLD, 13));
+		botonCambiarCostos.setBounds(385, 182, 167, 23);
+		botonCambiarCostos.addActionListener(this);
+		panelDeControl.add(botonCambiarCostos);
+//		panelDeControlDeslizable.add(costos);
 	}
+		
+
 
 	private void generarPanelDeCarga() {
 
 		panelDeCarga = new JPanel();
+		panelDeCarga.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelDeCarga.setBackground(new Color(64, 128, 128));
-		panelDeCarga.setBounds(21, 207, 530, 191);
+		panelDeCarga.setBounds(21, 216, 530, 194);
 		panelDeCarga.setLayout(null);
-//		panelDeControl.add(panelDeCarga);
-		panelDeControlDeslizable.add(panelDeCarga);
+		panelDeControl.add(panelDeCarga);
+//		panelDeControlDeslizable.add(panelDeCarga);
 		
 		generarComboBox();
 		generarInputs();
@@ -253,22 +270,7 @@ public class VentanaPrincipal implements ActionListener {
 		listaDeProvincias.setBounds(325, 62, 171, 22);
 		panelDeCarga.add(listaDeProvincias);
 	}
-
-	private void generarMapa() {
-
-		mapa = new JMapViewer();
-		mapa.setBorder(null);
-		mapa.setAlignmentX(Component.LEFT_ALIGNMENT);
-		mapa.setAlignmentY(Component.TOP_ALIGNMENT);
-		mapa.setZoomControlsVisible(false);
-		mapa.setPreferredSize(new Dimension(500, 950));
-		mapa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-		// Nos posicionamos sobre Argentina
-		Coordinate coordenada = new Coordinate(-39.716, -63.616);
-		mapa.setDisplayPosition(coordenada, 5);
-		mapa.setBounds(0, 0, 500, 1000);
-	}
+	
 
 	private void generarInputs() {
 
@@ -331,8 +333,8 @@ public class VentanaPrincipal implements ActionListener {
 		botonGenerarConexiones.setFont(new Font("Unispace", Font.BOLD, 13));
 		botonGenerarConexiones.setBounds(21, 617, 206, 23);
 		botonGenerarConexiones.addActionListener(this);
-//		panelDeControl.add(botonGenerarConexiones);
-		panelDeControlDeslizable.add(botonGenerarConexiones);
+		panelDeControl.add(botonGenerarConexiones);
+//		panelDeControlDeslizable.add(botonGenerarConexiones);
 	}
 
 	private void generarListaNombreYProvincia() {
@@ -345,8 +347,8 @@ public class VentanaPrincipal implements ActionListener {
 		JScrollPane listaDeslizable = new JScrollPane(listaNombreyProvincia);
 		listaDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		listaDeslizable.setBounds(21, 447, 531, 159);
-//		panelDeControl.add(listaNombreyProvincia);
-		panelDeControlDeslizable.add(listaDeslizable);
+		panelDeControl.add(listaDeslizable);
+//		panelDeControlDeslizable.add(listaDeslizable);
 	}
 
 	private DefaultListModel<String> modelarListaNombreYProvincia() {
@@ -366,15 +368,15 @@ public class VentanaPrincipal implements ActionListener {
 		panelInfo.setBackground(new Color(0, 128, 192));
 		panelInfo.setBounds(23, 687, 529, 215);
 		panelInfo.setLayout(null);
-//		panelDeControl.add(panelInfo);
-		panelDeControlDeslizable.add(panelInfo);
+		panelDeControl.add(panelInfo);
+//		panelDeControlDeslizable.add(panelInfo);
 		
 
 		JLabel _localidadesIngresadas = new JLabel("Localidades ingresadas:");
 		_localidadesIngresadas.setFont(new Font("Unispace", Font.BOLD, 15));
 		_localidadesIngresadas.setBounds(21, 421, 408, 23);
-//		panelDeControl.add(_localidadesIngresadas);
-		panelDeControlDeslizable.add(_localidadesIngresadas);
+		panelDeControl.add(_localidadesIngresadas);
+//		panelDeControlDeslizable.add(_localidadesIngresadas);
 
 		solucion = new JTextArea();
 		solucion.setForeground(new Color(255, 255, 255));
@@ -391,12 +393,39 @@ public class VentanaPrincipal implements ActionListener {
 		_costoConexion.setBounds(21, 663, 206, 22);
 		_costoConexion.setForeground(new Color(0, 0, 0));
 		_costoConexion.setFont(new Font("Unispace", Font.BOLD, 15));
-//		panelDeControl.add(_costoConexion);
-		panelDeControlDeslizable.add(_costoConexion);
+		panelDeControl.add(_costoConexion);
+//		panelDeControlDeslizable.add(_costoConexion);
 
+	}
+	
+	private void generarPanelMapa() {
+		generarMapa();
+		panelMapa = new JPanel();
+		panelMapa.setForeground(new Color(128, 128, 128));
+		panelMapa.setBackground(new Color(128, 128, 128));
+		panelMapa.setBounds(0, 0, 499, 1000);
+		panelMapa.add(mapa);
+		frame.getContentPane().add(panelMapa);
+	}
+
+	private void generarMapa() {
+
+		mapa = new JMapViewer();
+		mapa.setBorder(null);
+		mapa.setAlignmentX(Component.LEFT_ALIGNMENT);
+		mapa.setAlignmentY(Component.TOP_ALIGNMENT);
+		mapa.setZoomControlsVisible(false);
+		mapa.setPreferredSize(new Dimension(500, 950));
+		mapa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+		// Nos posicionamos sobre Argentina
+		Coordinate coordenada = new Coordinate(-39.716, -63.616);
+		mapa.setDisplayPosition(coordenada, 5);
+		mapa.setBounds(0, 0, 500, 1000);
 	}
 
 	private void darSolucion() {
+		solucion.setText("");
 		solucion.append("Conexiones Telefonicas a construir : (En tramos) \n");
 		solucion.append(logica.darSolucionAGM() + "\n");
 		solucion.append("Solucion basada en el Algoritmo de Prim!");
@@ -427,17 +456,27 @@ public class VentanaPrincipal implements ActionListener {
 		inputNombre.setText(null);
 	}
 	
+	private void dibujarConexiones() {
+	    List<Ubicacion> ubicaciones = logica.getUbicaciones();
+	    
+	    Ubicacion ubiOrigen;
+	    Ubicacion ubiDestino;
+	    
+	    Coordinate coord1;
+	    Coordinate coord2;
+	    
+	    for (Arista arista : logica.getAristasAGM()) {
+	      ubiOrigen = ubicaciones.get(arista.getOrigen());
+	      ubiDestino = ubicaciones.get(arista.getDestino());
+	      
+	      coord1 = new Coordinate(ubiOrigen.getLatitud(), ubiOrigen.getLongitud());
+	      coord2 = new Coordinate(ubiDestino.getLatitud(), ubiDestino.getLongitud());
+	      
+	      MapPolygon conexion = new MapPolygonImpl(coord1, coord2, coord2);
+	      mapa.addMapPolygon(conexion);
+	    }
+	  }
 	
-	
-	private void generarConexiones() {
-		
-		for(int i=0;i<conjuntoSolucion.size()-1;i++) {
-			MapPolygon conexion = new MapPolygonImpl(conjuntoSolucion.get(i),conjuntoSolucion.get(i),conjuntoSolucion.get(i+1));
-			mapa.addMapPolygon(conexion);
-			
-		}
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -450,15 +489,10 @@ public class VentanaPrincipal implements ActionListener {
 		}
 		if (e.getSource() == botonGenerarConexiones) {
 			if (logica.getUbicaciones().size() >= 2) {
-				botonCarga.setEnabled(false);
-				botonGenerarConexiones.setEnabled(false);
-//				MapPolygon conexion = new MapPolygonImpl(coordenadas);
-//				mapa.addMapPolygon(conexion);
-				
+//				botonCarga.setEnabled(false);
+//				botonGenerarConexiones.setEnabled(false);		
 				darSolucion();
-				conjuntoSolucion=logica.solucion();
-				generarConexiones();
-				
+				dibujarConexiones();
 			} else {
 				JOptionPane.showMessageDialog(null,
 						"Para generar una conexion debe haber al menos 2 localidades ingresadas!", "Mensaje",
@@ -476,6 +510,18 @@ public class VentanaPrincipal implements ActionListener {
 				@SuppressWarnings("unused")
 				VentanaPrincipal nuevo = new VentanaPrincipal();
 			}
+		}
+		
+		if(e.getSource()== botonCambiarCostos) {
+			String costoPorKM=JOptionPane.showInputDialog(null, "Ingrese el nuevo costo por KM: ","Costo por KM", JOptionPane.PLAIN_MESSAGE);
+			campoCostoPorKM.setText(costoPorKM + "$");
+			planificador.setCostoPorKilometro(Integer.valueOf(costoPorKM));
+			String conexion300Km=JOptionPane.showInputDialog(null, "Ingrese el nuevo valor del KM si la conexion es superior a 300 KM: ","Costo por KM mayor a 300 KM", JOptionPane.PLAIN_MESSAGE);
+			campoConexion300KM.setText(conexion300Km + "$");
+			planificador.setPorcentajeDeAumento(Integer.valueOf(conexion300Km));
+			String tasaInterProvincial=JOptionPane.showInputDialog(null, "Ingrese la nueva tasa Inter-Provincial","Tasa InterProvincial", JOptionPane.PLAIN_MESSAGE);
+			campoTasaInterProvincial.setText(tasaInterProvincial + "$");
+			planificador.setCostoDistintaProvincia(Integer.valueOf(tasaInterProvincial));
 		}
 	}
 
