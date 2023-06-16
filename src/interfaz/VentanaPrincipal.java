@@ -8,7 +8,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -36,7 +35,6 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
 
 import entidad.Arista;
-import entidad.Planificador;
 import entidad.Ubicacion;
 import logica.LogicaAGM;
 
@@ -53,59 +51,35 @@ public class VentanaPrincipal implements ActionListener {
 	private JPanel panelDeCarga;
 	private JPanel panelInfo;
 	private JButton botonCarga;
-	private JButton botonGenerarConexiones;
+	private JLabel campoCostoPorKM;
+	private JLabel campoConexion300KM;
+	private JLabel campoTasaInterProvincial;
 	private JButton botonCambiarCostos;
-	private JComboBox<String> listaDeProvincias;
-	private JList<String> listaNombreyProvincia;
-	private List<Coordinate> coordenadas;
 	private JTextField inputLatitud;
 	private JTextField inputLongitud;
 	private JTextField inputNombre;
+	private JButton botonGenerarConexiones;
+	private JComboBox<String> listaDeProvincias;
+	private JList<String> listaNombreyProvincia;
 	private JTextArea solucion;
-
-	private Planificador planificador;
+	
 	private LogicaAGM logica;
 	
 //	private List<Coordinate> conjuntoSolucion;
 //	private JScrollPane panelDeControlDeslizable;
-	private JLabel campoCostoPorKM;
-	private JLabel campoConexion300KM;
-	private JLabel campoTasaInterProvincial;
+
 
 	public VentanaPrincipal() {
 		initialize();
 	}
-	
-	private void agregarLocalidad(String nombre, String provincia, double latitud, double longitud) {
-		Ubicacion ubicacion = new Ubicacion(nombre, provincia, latitud, longitud);
-		Coordinate coordenada = new Coordinate(latitud, longitud);
-		
-		if (!coordenadas.contains(coordenada)) {
-			coordenadas.add(coordenada);
-			logica.agregarUbicacion(ubicacion);
-			MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
-			marcador.getStyle().setBackColor(Color.red);
-			marcador.getStyle().setColor(Color.RED);
-			mapa.addMapMarker(marcador);
-			agregarNombreYProvinciaEnLista(nombre, provincia);
-		} else {
-			JOptionPane.showMessageDialog(null,
-					nombre + "(" + provincia + ") ya fue agregada. No se admiten repetidos.", "Advertencia",
-					JOptionPane.OK_OPTION);
-		}
-	}
 
-	private void initialize() {
-
-		planificador = new Planificador();
+	private void initialize() {		
 		logica = new LogicaAGM();
-		coordenadas = new ArrayList<>();
-
 		generarFrame();
 		crearMenu();
 		generarPanelDeControl();
 		generarPanelMapa();
-
+		
 	}
 
 	private void generarFrame() {
@@ -134,7 +108,6 @@ public class VentanaPrincipal implements ActionListener {
 
 		opciones.add(reiniciar);
 		opciones.add(salir);
-
 	}
 	
 	private void generarPanelDeControl() {
@@ -163,6 +136,8 @@ public class VentanaPrincipal implements ActionListener {
 		generarBotonConexion();
 		generarPanelInfo();
 	}
+	
+
 
 	private void generarTitulo() {
 		JTextField titulo = new JTextField();
@@ -212,21 +187,24 @@ public class VentanaPrincipal implements ActionListener {
 		etiquetaTasaProvincial.setBounds(385, 115, 167, 28);
 		panelDeControl.add(etiquetaTasaProvincial);
 
-		campoCostoPorKM = new JLabel(String.valueOf(planificador.getCostoPorKilometro()) + "$");
+		//campoCostoPorKM = new JLabel(String.valueOf(planificador.getCostoPorKilometro()) + "$");
+		campoCostoPorKM = new JLabel("0");
 		campoCostoPorKM.setBorder(new LineBorder(new Color(0, 0, 0)));
 		campoCostoPorKM.setOpaque(true);
 		campoCostoPorKM.setHorizontalAlignment(SwingConstants.CENTER);
 		campoCostoPorKM.setBounds(21, 145, 119, 23);
 		panelDeControl.add(campoCostoPorKM);
 
-		campoConexion300KM = new JLabel(String.valueOf(planificador.getPorcentajeDeAumento())+ "$");
+		//campoConexion300KM = new JLabel(String.valueOf(planificador.getPorcentajeDeAumento())+ "$");
+		campoConexion300KM = new JLabel("0");
 		campoConexion300KM.setBorder(new LineBorder(new Color(0, 0, 0)));
 		campoConexion300KM.setOpaque(true);
 		campoConexion300KM.setHorizontalAlignment(SwingConstants.CENTER);
 		campoConexion300KM.setBounds(138, 145, 250, 23);
 		panelDeControl.add(campoConexion300KM);
 
-		campoTasaInterProvincial = new JLabel(String.valueOf(planificador.getCostoDistintaProvincia())+ "$");
+		//campoTasaInterProvincial = new JLabel(String.valueOf(planificador.getCostoDistintaProvincia())+ "$");
+		campoTasaInterProvincial = new JLabel("0");
 		campoTasaInterProvincial.setBorder(new LineBorder(new Color(0, 0, 0)));
 		campoTasaInterProvincial.setOpaque(true);
 		campoTasaInterProvincial.setHorizontalAlignment(SwingConstants.CENTER);
@@ -240,8 +218,6 @@ public class VentanaPrincipal implements ActionListener {
 		panelDeControl.add(botonCambiarCostos);
 //		panelDeControlDeslizable.add(costos);
 	}
-		
-
 
 	private void generarPanelDeCarga() {
 
@@ -425,13 +401,30 @@ public class VentanaPrincipal implements ActionListener {
 		mapa.setDisplayPosition(coordenada, 5);
 		mapa.setBounds(0, 0, 500, 1000);
 	}
+	
+	private void agregarLocalidad(String nombre, String provincia, double latitud, double longitud) {
+		Ubicacion ubicacion = new Ubicacion(nombre, provincia, latitud, longitud);
+			try {
+				logica.agregarUbicacion(ubicacion);
+				MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
+				marcador.getStyle().setBackColor(Color.red);
+				marcador.getStyle().setColor(Color.RED);
+				mapa.addMapMarker(marcador);
+				agregarNombreYProvinciaEnLista(nombre, provincia);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null,
+						e.getMessage(), "Advertencia",
+						JOptionPane.OK_OPTION);
+			}
+				
+	}	
 
 	private void mostrarSolucion() {
-		dibujarConexiones();
 		solucion.setText("");
 		solucion.append("Conexiones Telefonicas a construir : (En tramos) \n");
 		solucion.append(logica.darSolucionAGM() + "\n");
 		solucion.append("Solucion basada en el Algoritmo de Prim!");
+		
 	}
 
 	private boolean verificarInputs() {
@@ -495,6 +488,7 @@ public class VentanaPrincipal implements ActionListener {
 //				botonCarga.setEnabled(false);
 //				botonGenerarConexiones.setEnabled(false);		
 				mostrarSolucion();
+				dibujarConexiones();
 			} else {
 				JOptionPane.showMessageDialog(null,
 						"Para generar una conexion debe haber al menos 2 localidades ingresadas!", "Mensaje",
@@ -515,17 +509,14 @@ public class VentanaPrincipal implements ActionListener {
 		}
 		
 		if(e.getSource()== botonCambiarCostos) {
-			
 			//pasarlo a una funcion
 			String costoPorKM=JOptionPane.showInputDialog(null, "Ingrese el nuevo costo por KM: ","Costo por KM", JOptionPane.PLAIN_MESSAGE);
 			campoCostoPorKM.setText(costoPorKM + "$");
-			planificador.setCostoPorKilometro(Integer.valueOf(costoPorKM));
 			String conexion300Km=JOptionPane.showInputDialog(null, "Ingrese el nuevo valor del KM si la conexion es superior a 300 KM: ","Costo por KM mayor a 300 KM", JOptionPane.PLAIN_MESSAGE);
 			campoConexion300KM.setText(conexion300Km + "$");
-			planificador.setPorcentajeDeAumento(Integer.valueOf(conexion300Km));
 			String tasaInterProvincial=JOptionPane.showInputDialog(null, "Ingrese la nueva tasa Inter-Provincial","Tasa InterProvincial", JOptionPane.PLAIN_MESSAGE);
 			campoTasaInterProvincial.setText(tasaInterProvincial + "$");
-			planificador.setCostoDistintaProvincia(Integer.valueOf(tasaInterProvincial));
+			logica.definirCostos(Integer.valueOf(costoPorKM), Integer.valueOf(conexion300Km),Integer.valueOf(tasaInterProvincial));	
 		}
 	}
 

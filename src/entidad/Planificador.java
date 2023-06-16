@@ -10,6 +10,16 @@ public class Planificador {
 		this.porcentajeDeAumento = 30;
 		this.costoDistintaProvincia = 3000;
 	}
+	
+	public Planificador(int costoPorKilometro,int porcentajeDeAumento, int costoDistintaProvincia) {
+		this.costoPorKilometro=costoPorKilometro;
+		this.porcentajeDeAumento=porcentajeDeAumento;
+		this.costoDistintaProvincia=costoDistintaProvincia;
+	}
+	
+//	setCostoPorKilometro(costoPorKilometro);
+//	setCostoDistintaProvincia(costoDistintaProvincia);
+//	setPorcentajeDeAumento(porcentajeDeAumento);
 
 	public int getCostoPorKilometro() {
 		return costoPorKilometro;

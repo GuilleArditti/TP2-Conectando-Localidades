@@ -15,8 +15,13 @@ public class LogicaAGM {
 	private Grafo agm;
 
 	public LogicaAGM() {
-		planificador = new Planificador();
+//		planificador = new Planificador();
 		ubicaciones = new ArrayList<>();
+	}
+
+	public Planificador definirCostos(int costoKM, int costoKM300KM, int costoDistintaProvincia) {
+		planificador= new Planificador(costoKM,costoKM300KM,costoDistintaProvincia);
+		return planificador;
 	}
 
 	public void agregarUbicacion(Ubicacion ubicacion) {
