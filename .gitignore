@@ -1,2 +1,11 @@
 bin/
 .settings/
+bin/entidad/GrafoTest.class
+bin/test/LogicaAGMTest.class
+bin/logica/LogicaAGM.class
+bin/interfaz/VentanaPrincipal.class
+bin/interfaz/VentanaPrincipal$2.class
+bin/entidad/GrafoTest.class
+.classpath
+.classpath
+.classpath
