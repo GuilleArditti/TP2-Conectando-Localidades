@@ -66,8 +66,8 @@ public class VentanaPrincipal implements ActionListener {
 	private Planificador planificador;
 	private LogicaAGM logica;
 	
-	private List<Coordinate> conjuntoSolucion;
-	private JScrollPane panelDeControlDeslizable;
+//	private List<Coordinate> conjuntoSolucion;
+//	private JScrollPane panelDeControlDeslizable;
 	private JLabel campoCostoPorKM;
 	private JLabel campoConexion300KM;
 	private JLabel campoTasaInterProvincial;
@@ -138,6 +138,8 @@ public class VentanaPrincipal implements ActionListener {
 	}
 	
 	private void generarPanelDeControl() {
+		
+		//en duda para panel scrolleable
 
 //		panelDeControlDeslizable= new JScrollPane();
 //		panelDeControlDeslizable.setFont(new Font("Unispace", Font.BOLD, 11));
@@ -424,7 +426,8 @@ public class VentanaPrincipal implements ActionListener {
 		mapa.setBounds(0, 0, 500, 1000);
 	}
 
-	private void darSolucion() {
+	private void mostrarSolucion() {
+		dibujarConexiones();
 		solucion.setText("");
 		solucion.append("Conexiones Telefonicas a construir : (En tramos) \n");
 		solucion.append(logica.darSolucionAGM() + "\n");
@@ -491,8 +494,7 @@ public class VentanaPrincipal implements ActionListener {
 			if (logica.getUbicaciones().size() >= 2) {
 //				botonCarga.setEnabled(false);
 //				botonGenerarConexiones.setEnabled(false);		
-				darSolucion();
-				dibujarConexiones();
+				mostrarSolucion();
 			} else {
 				JOptionPane.showMessageDialog(null,
 						"Para generar una conexion debe haber al menos 2 localidades ingresadas!", "Mensaje",
@@ -513,6 +515,8 @@ public class VentanaPrincipal implements ActionListener {
 		}
 		
 		if(e.getSource()== botonCambiarCostos) {
+			
+			//pasarlo a una funcion
 			String costoPorKM=JOptionPane.showInputDialog(null, "Ingrese el nuevo costo por KM: ","Costo por KM", JOptionPane.PLAIN_MESSAGE);
 			campoCostoPorKM.setText(costoPorKM + "$");
 			planificador.setCostoPorKilometro(Integer.valueOf(costoPorKM));
