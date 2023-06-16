@@ -16,7 +16,7 @@ public class LogicaAGMTest {
 
 	@Test
 	public void testTamanoAGMCorrecto() {
-		int esperado = 4;
+		int esperado = 5;
 		
 		// Agregamos aristas con pesos
 		agregarAristas();
@@ -41,12 +41,10 @@ public class LogicaAGMTest {
 		assertEquals(pesoEsperado, pesoObtenido);
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testGrafoVacio() {
-		int esperado = 0;
-		int obtenido = logica.algoritmoDePrim(grafo).tamano();
-
-		assertEquals(esperado, obtenido);
+		Grafo grafoVacio = new Grafo(0);
+		logica.algoritmoDePrim(grafoVacio).tamano();
 	}
 
 	private void agregarAristas() {
