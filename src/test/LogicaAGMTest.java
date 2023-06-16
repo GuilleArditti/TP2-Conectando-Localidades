@@ -11,8 +11,8 @@ import entidad.Arista;
 
 public class LogicaAGMTest {
 
-	LogicaAGM logica = new LogicaAGM();;
-	Grafo grafo = new Grafo(5);
+	private LogicaAGM logica = new LogicaAGM();;
+	private Grafo grafo = new Grafo(5);
 
 	@Test
 	public void testTamanoAGMCorrecto() {
