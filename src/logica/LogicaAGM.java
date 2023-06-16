@@ -51,6 +51,11 @@ public class LogicaAGM {
 	}
 
 	public Grafo algoritmoDePrim(Grafo grafo) {
+		if (grafo == null)
+			throw new IllegalArgumentException("El Grafo es null.");
+		if (grafo.tamano() == 0)
+			throw new IllegalArgumentException("Grafo sin nodos, no se puede generar el AGM.");
+		
 		int n = grafo.tamano();
 		boolean[] verticesVisitados = new boolean[n]; 							// Para marcar los vertices visitados
 		List<Arista> pendientes = new ArrayList<>(); 							// iniciamos con una lista de aristas vacias
