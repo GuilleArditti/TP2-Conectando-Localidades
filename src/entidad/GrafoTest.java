@@ -71,7 +71,7 @@ public class GrafoTest {
 	}
 
 	@Test
-	public void verticesVecinosTest() {
+	public void testVerticesVecinos() {
 		Grafo grafo = new Grafo(4);
 		grafo.agregarArista(1, 0, 1);
 		grafo.agregarArista(1, 2, 1);
@@ -85,13 +85,13 @@ public class GrafoTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void vecinosVerticeNegativoTest() {
+	public void testVecinosVerticeNegativo() {
 		Grafo grafo = new Grafo(5);
 		grafo.vecinos(-1);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void vecinosVerticeExcedidoTest() {
+	public void testVecinosVerticeExcedido() {
 		Grafo grafo = new Grafo(5);
 		grafo.vecinos(6);
 	}
