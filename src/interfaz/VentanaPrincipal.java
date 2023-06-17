@@ -101,7 +101,7 @@ public class VentanaPrincipal implements ActionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tamañoPaneles = new Dimension(650, 650);
 		panelPrincipal = new JPanel(new GridLayout(1, 2));
-		frame.add(panelPrincipal);
+		frame.getContentPane().add(panelPrincipal);
 		frame.setVisible(true);
 	}
 
@@ -173,7 +173,7 @@ public class VentanaPrincipal implements ActionListener {
 		titulo.setBackground(new Color(0, 128, 255));
 		titulo.setFont(new Font("Unispace", Font.BOLD, 27));
 		titulo.setText(" Conectando Localidades");
-		titulo.setBounds(21, 11, 531, 67);
+		titulo.setBounds(21, 0, 531, 44);
 		titulo.setEditable(false);
 		panelDeControl.add(titulo);
 	}
@@ -186,7 +186,7 @@ public class VentanaPrincipal implements ActionListener {
 		costos.setForeground(new Color(0, 0, 0));
 		costos.setBackground(new Color(128, 128, 255));
 		costos.setFont(new Font("Unispace", Font.BOLD, 17));
-		costos.setBounds(21, 97, 531, 23);
+		costos.setBounds(21, 44, 531, 23);
 		panelDeControl.add(costos);
 
 		JLabel etiquetaCostoXKM = new JLabel("Costo x KM ($)");
@@ -194,7 +194,7 @@ public class VentanaPrincipal implements ActionListener {
 		etiquetaCostoXKM.setOpaque(true);
 		etiquetaCostoXKM.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaCostoXKM.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetaCostoXKM.setBounds(21, 115, 119, 28);
+		etiquetaCostoXKM.setBounds(21, 65, 119, 28);
 		panelDeControl.add(etiquetaCostoXKM);
 
 		JLabel etiquetaPorcentajeDeAumento = new JLabel("% Aumento Costo x KM (>300KM) ");
@@ -202,7 +202,7 @@ public class VentanaPrincipal implements ActionListener {
 		etiquetaPorcentajeDeAumento.setOpaque(true);
 		etiquetaPorcentajeDeAumento.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaPorcentajeDeAumento.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetaPorcentajeDeAumento.setBounds(138, 115, 235, 28);
+		etiquetaPorcentajeDeAumento.setBounds(138, 65, 235, 28);
 		etiquetaPorcentajeDeAumento
 				.setToolTipText("Porcentaje de aumento del Costo x KM si la conexion es mayor a 300 KM");
 		panelDeControl.add(etiquetaPorcentajeDeAumento);
@@ -212,12 +212,12 @@ public class VentanaPrincipal implements ActionListener {
 		etiquetaTasaProvincial.setOpaque(true);
 		etiquetaTasaProvincial.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaTasaProvincial.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetaTasaProvincial.setBounds(372, 115, 180, 28);
+		etiquetaTasaProvincial.setBounds(372, 65, 180, 28);
 		panelDeControl.add(etiquetaTasaProvincial);
 
 		botonIngresarCostos = new JButton("Ingresar costos");
 		botonIngresarCostos.setFont(new Font("Unispace", Font.BOLD, 12));
-		botonIngresarCostos.setBounds(385, 182, 167, 23);
+		botonIngresarCostos.setBounds(385, 114, 167, 23);
 		botonIngresarCostos.addActionListener(this);
 		panelDeControl.add(botonIngresarCostos);
 	}
@@ -226,7 +226,7 @@ public class VentanaPrincipal implements ActionListener {
 		panelDeCarga = new JPanel();
 		panelDeCarga.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelDeCarga.setBackground(new Color(64, 128, 128));
-		panelDeCarga.setBounds(21, 216, 530, 194);
+		panelDeCarga.setBounds(22, 148, 530, 194);
 		panelDeCarga.setLayout(null);
 		panelDeControl.add(panelDeCarga);
 
@@ -255,7 +255,7 @@ public class VentanaPrincipal implements ActionListener {
 		campoCostoPorKM.requestFocus();
 		campoCostoPorKM.setHorizontalAlignment(SwingConstants.CENTER);
 		campoCostoPorKM.setBorder(new LineBorder(new Color(171, 173, 179)));
-		campoCostoPorKM.setBounds(21, 143, 119, 20);
+		campoCostoPorKM.setBounds(21, 93, 119, 20);
 		panelDeControl.add(campoCostoPorKM);
 		campoCostoPorKM.setColumns(10);
 
@@ -263,14 +263,14 @@ public class VentanaPrincipal implements ActionListener {
 		campoPorcentajeDeAumento.setHorizontalAlignment(SwingConstants.CENTER);
 		campoPorcentajeDeAumento.setBorder(new LineBorder(new Color(171, 173, 179)));
 		campoPorcentajeDeAumento.setColumns(10);
-		campoPorcentajeDeAumento.setBounds(138, 143, 235, 20);
+		campoPorcentajeDeAumento.setBounds(138, 93, 235, 20);
 		panelDeControl.add(campoPorcentajeDeAumento);
 
 		campoTasaInterProvincial = new JTextField();
 		campoTasaInterProvincial.setHorizontalAlignment(SwingConstants.CENTER);
 		campoTasaInterProvincial.setBorder(new LineBorder(new Color(171, 173, 179)));
 		campoTasaInterProvincial.setColumns(10);
-		campoTasaInterProvincial.setBounds(372, 143, 180, 20);
+		campoTasaInterProvincial.setBounds(372, 93, 180, 20);
 		panelDeControl.add(campoTasaInterProvincial);
 
 		JLabel _longitud = new JLabel("Longitud");
@@ -330,7 +330,7 @@ public class VentanaPrincipal implements ActionListener {
 		botonGenerarConexiones = new JButton("Generar Conexion");
 		botonGenerarConexiones.setEnabled(false);
 		botonGenerarConexiones.setFont(new Font("Unispace", Font.BOLD, 13));
-		botonGenerarConexiones.setBounds(21, 617, 206, 23);
+		botonGenerarConexiones.setBounds(21, 530, 206, 23);
 		botonGenerarConexiones.addActionListener(this);
 		panelDeControl.add(botonGenerarConexiones);
 	}
@@ -342,7 +342,7 @@ public class VentanaPrincipal implements ActionListener {
 		modelarListaNombreYProvincia();
 		JScrollPane listaDeslizable = new JScrollPane(listaNombreyProvincia);
 		listaDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		listaDeslizable.setBounds(21, 447, 531, 159);
+		listaDeslizable.setBounds(21, 368, 531, 159);
 		panelDeControl.add(listaDeslizable);
 	}
 
@@ -361,13 +361,13 @@ public class VentanaPrincipal implements ActionListener {
 	private void generarPanelInfo() {
 		panelInfo = new JPanel();
 		panelInfo.setBackground(new Color(0, 128, 192));
-		panelInfo.setBounds(23, 687, 529, 215);
+		panelInfo.setBounds(21, 588, 529, 215);
 		panelInfo.setLayout(null);
 		panelDeControl.add(panelInfo);
 
 		JLabel _localidadesIngresadas = new JLabel("Localidades ingresadas:");
 		_localidadesIngresadas.setFont(new Font("Unispace", Font.BOLD, 15));
-		_localidadesIngresadas.setBounds(21, 421, 408, 23);
+		_localidadesIngresadas.setBounds(21, 344, 408, 23);
 		panelDeControl.add(_localidadesIngresadas);
 
 		solucion = new JTextArea();
@@ -382,7 +382,7 @@ public class VentanaPrincipal implements ActionListener {
 		panelInfo.add(Deslizable);
 
 		JLabel _costoConexion = new JLabel("Costos de la conexión:");
-		_costoConexion.setBounds(21, 663, 206, 22);
+		_costoConexion.setBounds(21, 560, 206, 22);
 		_costoConexion.setForeground(new Color(0, 0, 0));
 		_costoConexion.setFont(new Font("Unispace", Font.BOLD, 15));
 		panelDeControl.add(_costoConexion);
