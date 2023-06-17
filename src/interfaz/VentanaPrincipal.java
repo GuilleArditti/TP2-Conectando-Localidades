@@ -10,7 +10,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -36,9 +36,6 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
-
-import entidad.Arista;
-import entidad.Ubicacion;
 import logica.LogicaAGM;
 
 public class VentanaPrincipal implements ActionListener {
@@ -70,8 +67,7 @@ public class VentanaPrincipal implements ActionListener {
 	private JList<String> listaNombreyProvincia;
 	private LogicaAGM logica;
 
-//	private List<Coordinate> conjuntoSolucion;
-//	private JScrollPane panelDeControlDeslizable;
+	private ArrayList<ArrayList<Coordinate>> conjuntoSolucion;
 
 	public VentanaPrincipal() {
 		initialize();
@@ -99,7 +95,7 @@ public class VentanaPrincipal implements ActionListener {
 		frame.getContentPane().setBackground(new Color(0, 0, 0));
 		frame.setBounds(500, 20, 1200, 1020);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		tamañoPaneles = new Dimension(650, 650);
+		tamañoPaneles = new Dimension(600, 600);
 		panelPrincipal = new JPanel(new GridLayout(1, 2));
 		frame.getContentPane().add(panelPrincipal);
 		frame.setVisible(true);
@@ -129,6 +125,7 @@ public class VentanaPrincipal implements ActionListener {
 		panelMapa.setForeground(new Color(128, 128, 128));
 		panelMapa.setBackground(new Color(128, 128, 128));
 		panelMapa.setPreferredSize(tamañoPaneles);
+		panelMapa.setMaximumSize(new Dimension(750,750));
 //		panelMapa.add(fondo);
 		panelPrincipal.add(panelMapa);
 		panelMapa.add(mapa);
@@ -140,7 +137,7 @@ public class VentanaPrincipal implements ActionListener {
 		mapa.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mapa.setAlignmentY(Component.TOP_ALIGNMENT);
 		mapa.setZoomControlsVisible(false);
-		mapa.setPreferredSize(new Dimension(500, 950));
+		mapa.setPreferredSize(new Dimension(500, 1000));
 		mapa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		// Nos posicionamos sobre Argentina
@@ -154,6 +151,7 @@ public class VentanaPrincipal implements ActionListener {
 		panelDeControl.setFont(new Font("Unispace", Font.BOLD, 11));
 		panelDeControl.setBackground(new Color(128, 128, 128));
 		panelDeControl.setPreferredSize(tamañoPaneles);
+		panelDeControl.setMaximumSize(new Dimension(750,750));
 		panelDeControl.setLayout(null);
 //		panelDeControl.add(fondo);
 		panelPrincipal.add(panelDeControl);
@@ -186,7 +184,7 @@ public class VentanaPrincipal implements ActionListener {
 		costos.setForeground(new Color(0, 0, 0));
 		costos.setBackground(new Color(128, 128, 255));
 		costos.setFont(new Font("Unispace", Font.BOLD, 17));
-		costos.setBounds(21, 44, 531, 23);
+		costos.setBounds(21, 50, 531, 23);
 		panelDeControl.add(costos);
 
 		JLabel etiquetaCostoXKM = new JLabel("Costo x KM ($)");
@@ -194,7 +192,7 @@ public class VentanaPrincipal implements ActionListener {
 		etiquetaCostoXKM.setOpaque(true);
 		etiquetaCostoXKM.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaCostoXKM.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetaCostoXKM.setBounds(21, 65, 119, 28);
+		etiquetaCostoXKM.setBounds(21, 70, 119, 23);
 		panelDeControl.add(etiquetaCostoXKM);
 
 		JLabel etiquetaPorcentajeDeAumento = new JLabel("% Aumento Costo x KM (>300KM) ");
@@ -202,7 +200,7 @@ public class VentanaPrincipal implements ActionListener {
 		etiquetaPorcentajeDeAumento.setOpaque(true);
 		etiquetaPorcentajeDeAumento.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaPorcentajeDeAumento.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetaPorcentajeDeAumento.setBounds(138, 65, 235, 28);
+		etiquetaPorcentajeDeAumento.setBounds(138, 70, 235, 23);
 		etiquetaPorcentajeDeAumento
 				.setToolTipText("Porcentaje de aumento del Costo x KM si la conexion es mayor a 300 KM");
 		panelDeControl.add(etiquetaPorcentajeDeAumento);
@@ -212,12 +210,12 @@ public class VentanaPrincipal implements ActionListener {
 		etiquetaTasaProvincial.setOpaque(true);
 		etiquetaTasaProvincial.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaTasaProvincial.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetaTasaProvincial.setBounds(372, 65, 180, 28);
+		etiquetaTasaProvincial.setBounds(372, 70, 180, 23);
 		panelDeControl.add(etiquetaTasaProvincial);
 
 		botonIngresarCostos = new JButton("Ingresar costos");
 		botonIngresarCostos.setFont(new Font("Unispace", Font.BOLD, 12));
-		botonIngresarCostos.setBounds(385, 114, 167, 23);
+		botonIngresarCostos.setBounds(385, 123, 167, 23);
 		botonIngresarCostos.addActionListener(this);
 		panelDeControl.add(botonIngresarCostos);
 	}
@@ -226,7 +224,7 @@ public class VentanaPrincipal implements ActionListener {
 		panelDeCarga = new JPanel();
 		panelDeCarga.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelDeCarga.setBackground(new Color(64, 128, 128));
-		panelDeCarga.setBounds(22, 148, 530, 194);
+		panelDeCarga.setBounds(22, 157, 530, 150);
 		panelDeCarga.setLayout(null);
 		panelDeControl.add(panelDeCarga);
 
@@ -246,7 +244,7 @@ public class VentanaPrincipal implements ActionListener {
 			listaDeProvincias.addItem(provincias[i]);
 		}
 		listaDeProvincias.setFont(new Font("Unispace", Font.BOLD, 11));
-		listaDeProvincias.setBounds(325, 62, 171, 22);
+		listaDeProvincias.setBounds(325, 44, 171, 22);
 		panelDeCarga.add(listaDeProvincias);
 	}
 
@@ -275,52 +273,52 @@ public class VentanaPrincipal implements ActionListener {
 
 		JLabel _longitud = new JLabel("Longitud");
 		_longitud.setFont(new Font("Unispace", Font.BOLD, 15));
-		_longitud.setBounds(225, 111, 78, 19);
+		_longitud.setBounds(222, 78, 78, 19);
 		panelDeCarga.add(_longitud);
 
 		inputLongitud = new JTextField();
 		inputLongitud.setFont(new Font("Unispace", Font.BOLD, 11));
-		inputLongitud.setBounds(325, 112, 109, 20);
+		inputLongitud.setBounds(325, 77, 109, 20);
 		inputLongitud.setColumns(10);
 		panelDeCarga.add(inputLongitud);
 
 		JLabel _latitud = new JLabel("Latitud");
-		_latitud.setBounds(10, 111, 78, 19);
+		_latitud.setBounds(10, 78, 78, 19);
 		panelDeCarga.add(_latitud);
 		_latitud.setFont(new Font("Unispace", Font.BOLD, 15));
 
 		inputLatitud = new JTextField();
 		inputLatitud.setFont(new Font("Unispace", Font.BOLD, 11));
-		inputLatitud.setBounds(82, 110, 98, 20);
+		inputLatitud.setBounds(82, 79, 98, 20);
 		inputLatitud.setColumns(10);
 		panelDeCarga.add(inputLatitud);
 
 		JLabel _nombre = new JLabel("Nombre");
 		_nombre.setFont(new Font("Unispace", Font.BOLD, 15));
-		_nombre.setBounds(10, 64, 78, 14);
+		_nombre.setBounds(10, 46, 78, 14);
 		panelDeCarga.add(_nombre);
 
 		inputNombre = new JTextField();
 		inputNombre.setFont(new Font("Unispace", Font.BOLD, 11));
-		inputNombre.setBounds(82, 63, 98, 20);
+		inputNombre.setBounds(82, 45, 98, 20);
 		inputNombre.setColumns(10);
 		panelDeCarga.add(inputNombre);
 
 		JLabel _provincia = new JLabel("Provincia");
 		_provincia.setFont(new Font("Unispace", Font.BOLD, 15));
-		_provincia.setBounds(225, 63, 81, 16);
+		_provincia.setBounds(222, 45, 81, 16);
 		panelDeCarga.add(_provincia);
 
 		JLabel _ingresarLocalidad = new JLabel("Ingresar Localidad");
-		_ingresarLocalidad.setFont(new Font("Unispace", Font.BOLD, 18));
-		_ingresarLocalidad.setBounds(10, 11, 231, 24);
+		_ingresarLocalidad.setFont(new Font("Unispace", Font.BOLD, 17));
+		_ingresarLocalidad.setBounds(10, 11, 231, 19);
 		panelDeCarga.add(_ingresarLocalidad);
 	}
 
 	private void generarBotonCarga() {
 		botonCarga = new JButton("Cargar");
 		botonCarga.setEnabled(false);
-		botonCarga.setBounds(10, 163, 121, 19);
+		botonCarga.setBounds(10, 123, 121, 19);
 		botonCarga.addActionListener(this);
 		panelDeCarga.add(botonCarga);
 		botonCarga.setFont(new Font("Unispace", Font.BOLD, 13));
@@ -330,7 +328,7 @@ public class VentanaPrincipal implements ActionListener {
 		botonGenerarConexiones = new JButton("Generar Conexion");
 		botonGenerarConexiones.setEnabled(false);
 		botonGenerarConexiones.setFont(new Font("Unispace", Font.BOLD, 13));
-		botonGenerarConexiones.setBounds(21, 530, 206, 23);
+		botonGenerarConexiones.setBounds(21, 483, 206, 23);
 		botonGenerarConexiones.addActionListener(this);
 		panelDeControl.add(botonGenerarConexiones);
 	}
@@ -342,7 +340,7 @@ public class VentanaPrincipal implements ActionListener {
 		modelarListaNombreYProvincia();
 		JScrollPane listaDeslizable = new JScrollPane(listaNombreyProvincia);
 		listaDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		listaDeslizable.setBounds(21, 368, 531, 159);
+		listaDeslizable.setBounds(21, 339, 531, 140);
 		panelDeControl.add(listaDeslizable);
 	}
 
@@ -361,34 +359,34 @@ public class VentanaPrincipal implements ActionListener {
 	private void generarPanelInfo() {
 		panelInfo = new JPanel();
 		panelInfo.setBackground(new Color(0, 128, 192));
-		panelInfo.setBounds(21, 588, 529, 215);
+		panelInfo.setBounds(23, 544, 529, 181);
 		panelInfo.setLayout(null);
 		panelDeControl.add(panelInfo);
 
 		JLabel _localidadesIngresadas = new JLabel("Localidades ingresadas:");
 		_localidadesIngresadas.setFont(new Font("Unispace", Font.BOLD, 15));
-		_localidadesIngresadas.setBounds(21, 344, 408, 23);
+		_localidadesIngresadas.setBounds(21, 316, 408, 23);
 		panelDeControl.add(_localidadesIngresadas);
 
 		solucion = new JTextArea();
+		solucion.setEditable(false);
 		solucion.setForeground(new Color(255, 255, 255));
 		solucion.setFont(new Font("Unispace", Font.BOLD, 13));
 		solucion.setBackground(new Color(0, 128, 192));
-		solucion.setEditable(false);
 		JScrollPane Deslizable = new JScrollPane(solucion);
-		Deslizable.setBounds(10, 11, 509, 193);
+		Deslizable.setBounds(0, 0, 529, 181);
 		Deslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		Deslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelInfo.add(Deslizable);
 
 		JLabel _costoConexion = new JLabel("Costos de la conexión:");
-		_costoConexion.setBounds(21, 560, 206, 22);
+		_costoConexion.setBounds(21, 517, 206, 22);
 		_costoConexion.setForeground(new Color(0, 0, 0));
 		_costoConexion.setFont(new Font("Unispace", Font.BOLD, 15));
 		panelDeControl.add(_costoConexion);
 	}
 
-	private void agregarLocalidad(String nombre, String provincia, double latitud, double longitud) {
+	private void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
 		try {
 			logica.agregarUbicacion(nombre, provincia, latitud, longitud);
 			MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
@@ -429,10 +427,9 @@ public class VentanaPrincipal implements ActionListener {
 	}
 
 	private boolean verificarInputsCostos() {
-		if ((campoCostoPorKM.getText().equals("0") || campoPorcentajeDeAumento.getText().equals("0")
-				|| campoTasaInterProvincial.getText().equals("0")) || campoCostoPorKM.getText().isEmpty()
-				|| campoPorcentajeDeAumento.getText().isEmpty() || campoTasaInterProvincial.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Campos vacíos o en 0. Definir los costos es obligatorio!",
+		if ((campoCostoPorKM.getText().equals("0") || campoCostoPorKM.getText().isEmpty()
+				|| campoPorcentajeDeAumento.getText().isEmpty() || campoTasaInterProvincial.getText().isEmpty())) {
+			JOptionPane.showMessageDialog(null, "Campos vacíos o costo por KM en 0. Definir los costos es obligatorio!",
 					"Advertencia", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
@@ -458,48 +455,25 @@ public class VentanaPrincipal implements ActionListener {
 		inputLongitud.setText(null);
 		inputNombre.setText(null);
 	}
-
+	
 	private void dibujarConexiones() {
-		List<Ubicacion> ubicaciones = logica.getUbicaciones();
-
-		Ubicacion ubiOrigen;
-		Ubicacion ubiDestino;
-
-		Coordinate coord1;
-		Coordinate coord2;
-
-		for (Arista arista : logica.getAristasAGM()) {
-			ubiOrigen = ubicaciones.get(arista.getOrigen());
-			ubiDestino = ubicaciones.get(arista.getDestino());
-
-			coord1 = new Coordinate(ubiOrigen.getLatitud(), ubiOrigen.getLongitud());
-			coord2 = new Coordinate(ubiDestino.getLatitud(), ubiDestino.getLongitud());
-
-			MapPolygon conexion = new MapPolygonImpl(coord1, coord2, coord2);
-			mapa.addMapPolygon(conexion);
+		conjuntoSolucion=logica.solucion();
+		for(int i=0;i<conjuntoSolucion.size();i++) {
+			for(int j=0;j<conjuntoSolucion.get(i).size()-1;j++) {
+				 MapPolygon conexion = new MapPolygonImpl(conjuntoSolucion.get(i).get(j),
+							conjuntoSolucion.get(i).get(j+1),
+							conjuntoSolucion.get(i).get(j+1));
+				 mapa.addMapPolygon(conexion);
+			}
 		}
 	}
-
-	// Metodo experimental a corregir (grafica ciclos)
-	// pensado para que la interfaz no maneje aristas ni ubicaciones, solo las
-	// coordenadas a representar pasadas desde la logica.
-
-//	private void representarConexiones() {
-//		conjuntoSolucion=logica.solucion();
-//		for(int i=0;i<conjuntoSolucion.size()-1;i++) {
-//			 MapPolygon conexion = new MapPolygonImpl(conjuntoSolucion.get(i),
-//					 								conjuntoSolucion.get(i+1),
-//					 								conjuntoSolucion.get(i+1));
-//		     mapa.addMapPolygon(conexion);
-//		}
-//	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == botonCarga) {
 			if (verificarInputsLocalidad()) {
-				agregarLocalidad(inputNombre.getText(), listaDeProvincias.getSelectedItem().toString(),
+				agregarUbicacion(inputNombre.getText(), listaDeProvincias.getSelectedItem().toString(),
 						Double.parseDouble(inputLatitud.getText()), Double.parseDouble(inputLongitud.getText()));
 				limpiarCampos();
 				botonGenerarConexiones.setEnabled(true);
@@ -507,18 +481,17 @@ public class VentanaPrincipal implements ActionListener {
 		}
 		
 		if (e.getSource() == botonGenerarConexiones) {
-			if (logica.getUbicaciones().size() >= 2) {
-				mapa.removeAllMapPolygons();
-				mostrarSolucion();
-				dibujarConexiones();
-				// representarConexiones();
-				botonGenerarConexiones.setEnabled(false);
-			} else {
-				JOptionPane.showMessageDialog(null,
-						"Para generar una conexion debe haber al menos 2 localidades ingresadas!", "Mensaje",
-						JOptionPane.OK_OPTION);
-			}
-		}
+				try {
+					mapa.removeAllMapPolygons();
+					mostrarSolucion();
+					dibujarConexiones();
+					botonGenerarConexiones.setEnabled(false);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null,
+							e1.getMessage(), "Mensaje",
+							JOptionPane.OK_OPTION);
+				}
+		} 
 		
 		if (e.getSource() == salir) {
 			frame.dispose();
