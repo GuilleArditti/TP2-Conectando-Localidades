@@ -3,6 +3,8 @@ package logica;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+
 import entidad.Arista;
 import entidad.Grafo;
 import entidad.Planificador;
@@ -23,7 +25,8 @@ public class LogicaAGM {
 		return planificador;
 	}
 
-	public void agregarUbicacion(Ubicacion ubicacion) {
+	public void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
+		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
 		if (!ubicaciones.contains(ubicacion))
 			ubicaciones.add(ubicacion);
 		else
@@ -150,5 +153,30 @@ public class LogicaAGM {
 	    
 	    return agm.getAristas();
 	  }
-
+	
+	//Metodo experimental a corregir (grafica ciclos)
+	//pensado para que la interfaz no maneje aristas ni ubicaciones, solo las coordenadas a representar pasadas desde la logica.
+	
+//	public List<Coordinate> solucion(){
+//		List<Coordinate> conjuntoSolucion= new ArrayList<Coordinate>();
+//		List<Ubicacion> ubicaciones = getUbicaciones();
+//	    
+//	    Ubicacion ubiOrigen;
+//	    Ubicacion ubiDestino;
+//	    
+//	    Coordinate coord1;
+//	    Coordinate coord2;
+//	    
+//	    for (Arista arista : getAristasAGM()) {
+//	      ubiOrigen = ubicaciones.get(arista.getOrigen());
+//	      ubiDestino = ubicaciones.get(arista.getDestino());
+//	      
+//	      coord1 = new Coordinate(ubiOrigen.getLatitud(), ubiOrigen.getLongitud());
+//	      coord2 = new Coordinate(ubiDestino.getLatitud(), ubiDestino.getLongitud());
+//	      conjuntoSolucion.add(coord1);
+//	      conjuntoSolucion.add(coord2);
+//	    }
+//	    
+//	   return conjuntoSolucion;
+//	}
 }

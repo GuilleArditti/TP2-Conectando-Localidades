@@ -190,7 +190,7 @@ public class VentanaPrincipal implements ActionListener {
 		panelDeControl.add(etiquetaTasaProvincial);
 
 		botonIngresarCostos = new JButton("Ingresar costos");
-		botonIngresarCostos.setFont(new Font("Unispace", Font.BOLD, 13));
+		botonIngresarCostos.setFont(new Font("Unispace", Font.BOLD, 12));
 		botonIngresarCostos.setBounds(385, 182, 167, 23);
 		botonIngresarCostos.addActionListener(this);
 		panelDeControl.add(botonIngresarCostos);
@@ -408,9 +408,8 @@ public class VentanaPrincipal implements ActionListener {
 	}
 	
 	private void agregarLocalidad(String nombre, String provincia, double latitud, double longitud) {
-		Ubicacion ubicacion = new Ubicacion(nombre, provincia, latitud, longitud);
 			try {
-				logica.agregarUbicacion(ubicacion);
+				logica.agregarUbicacion(nombre, provincia, latitud, longitud);
 				MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
 				marcador.getStyle().setBackColor(Color.red);
 				marcador.getStyle().setColor(Color.RED);
@@ -509,6 +508,19 @@ public class VentanaPrincipal implements ActionListener {
 	    }
 	  }
 	
+	//Metodo experimental a corregir (grafica ciclos)
+	//pensado para que la interfaz no maneje aristas ni ubicaciones, solo las coordenadas a representar pasadas desde la logica.
+	
+//	private void representarConexiones() {
+//		conjuntoSolucion=logica.solucion();
+//		for(int i=0;i<conjuntoSolucion.size()-1;i++) {
+//			 MapPolygon conexion = new MapPolygonImpl(conjuntoSolucion.get(i),
+//					 								conjuntoSolucion.get(i+1),
+//					 								conjuntoSolucion.get(i+1));
+//		     mapa.addMapPolygon(conexion);
+//		}
+//	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -517,12 +529,16 @@ public class VentanaPrincipal implements ActionListener {
 				agregarLocalidad(inputNombre.getText(), listaDeProvincias.getSelectedItem().toString(),
 						Double.parseDouble(inputLatitud.getText()), Double.parseDouble(inputLongitud.getText()));
 				limpiarCampos();
+				botonGenerarConexiones.setEnabled(true);
 			}
 		}
 		if (e.getSource() == botonGenerarConexiones) {
-			if (logica.getUbicaciones().size() >= 2) {	
+			if (logica.getUbicaciones().size() >= 2) {
+				mapa.removeAllMapPolygons();
 				mostrarSolucion();
 				dibujarConexiones();
+				//representarConexiones();
+				botonGenerarConexiones.setEnabled(false);
 			} else {
 				JOptionPane.showMessageDialog(null,
 						"Para generar una conexion debe haber al menos 2 localidades ingresadas!", "Mensaje",
@@ -549,6 +565,7 @@ public class VentanaPrincipal implements ActionListener {
 									Integer.valueOf(campoTasaInterProvincial.getText()));
 				JOptionPane.showMessageDialog(null,
 						"Costos ingresados exitosamente!", "Exito", JOptionPane.DEFAULT_OPTION);
+				botonIngresarCostos.setText("Actualizar costos");
 				botonCarga.setEnabled(true);
 				botonGenerarConexiones.setEnabled(true);
 			}
