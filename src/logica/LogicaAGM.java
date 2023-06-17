@@ -15,7 +15,6 @@ public class LogicaAGM {
 	private Grafo agm;
 
 	public LogicaAGM() {
-//		planificador = new Planificador();
 		ubicaciones = new ArrayList<>();
 	}
 

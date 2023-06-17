@@ -7,10 +7,6 @@ public class Ubicacion {
 	private double latitud;
 	private double longitud;
 	
-	public Ubicacion() {
-		
-	}
-
 	public Ubicacion(String nombre, String provincia, double latitud, double longitud) {
 		this.nombre = nombre;
 		this.provincia = provincia;

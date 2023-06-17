@@ -50,11 +50,11 @@ public class VentanaPrincipal implements ActionListener {
 	private JPanel panelDeControl;
 	private JPanel panelDeCarga;
 	private JPanel panelInfo;
+	private JTextField campoCostoPorKM;
+	private JTextField campoPorcentajeDeAumento;
+	private JTextField campoTasaInterProvincial;
 	private JButton botonCarga;
-	private JLabel campoCostoPorKM;
-	private JLabel campoConexion300KM;
-	private JLabel campoTasaInterProvincial;
-	private JButton botonCambiarCostos;
+	private JButton botonIngresarCostos;
 	private JTextField inputLatitud;
 	private JTextField inputLongitud;
 	private JTextField inputNombre;
@@ -64,6 +64,7 @@ public class VentanaPrincipal implements ActionListener {
 	private JTextArea solucion;
 	
 	private LogicaAGM logica;
+
 	
 //	private List<Coordinate> conjuntoSolucion;
 //	private JScrollPane panelDeControlDeslizable;
@@ -163,59 +164,36 @@ public class VentanaPrincipal implements ActionListener {
 		costos.setBounds(21, 97, 531, 23);
 		panelDeControl.add(costos);
 
-		JLabel etiquetaCostoXKM = new JLabel("Costo x KM");
+		JLabel etiquetaCostoXKM = new JLabel("Costo x KM ($)");
 		etiquetaCostoXKM.setBorder(new LineBorder(new Color(0, 0, 0)));
 		etiquetaCostoXKM.setOpaque(true);
-		etiquetaCostoXKM.setFont(new Font("Unispace", Font.BOLD, 13));
+		etiquetaCostoXKM.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaCostoXKM.setHorizontalAlignment(SwingConstants.CENTER);
 		etiquetaCostoXKM.setBounds(21, 115, 119, 28);
 		panelDeControl.add(etiquetaCostoXKM);
 
-		JLabel etiquetamayor300KM = new JLabel("Costo x KM si conexi\u00F3n >300 KM");
-		etiquetamayor300KM.setBorder(new LineBorder(new Color(0, 0, 0)));
-		etiquetamayor300KM.setOpaque(true);
-		etiquetamayor300KM.setFont(new Font("Unispace", Font.BOLD, 13));
-		etiquetamayor300KM.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetamayor300KM.setBounds(138, 115, 250, 28);
-		panelDeControl.add(etiquetamayor300KM);
+		JLabel etiquetaPorcentajeDeAumento = new JLabel("% Aumento Costo x KM (>300KM) ");
+		etiquetaPorcentajeDeAumento.setBorder(new LineBorder(new Color(0, 0, 0)));
+		etiquetaPorcentajeDeAumento.setOpaque(true);
+		etiquetaPorcentajeDeAumento.setFont(new Font("Unispace", Font.BOLD, 12));
+		etiquetaPorcentajeDeAumento.setHorizontalAlignment(SwingConstants.CENTER);
+		etiquetaPorcentajeDeAumento.setBounds(138, 115, 235, 28);
+		etiquetaPorcentajeDeAumento.setToolTipText("Porcentaje de aumento del Costo x KM si la conexion es mayor a 300 KM");
+		panelDeControl.add(etiquetaPorcentajeDeAumento);
 
-		JLabel etiquetaTasaProvincial = new JLabel("Tasa InterProvincial");
+		JLabel etiquetaTasaProvincial = new JLabel("Tasa InterProvincial ($)");
 		etiquetaTasaProvincial.setBorder(new LineBorder(new Color(0, 0, 0)));
 		etiquetaTasaProvincial.setOpaque(true);
-		etiquetaTasaProvincial.setFont(new Font("Unispace", Font.BOLD, 13));
+		etiquetaTasaProvincial.setFont(new Font("Unispace", Font.BOLD, 12));
 		etiquetaTasaProvincial.setHorizontalAlignment(SwingConstants.CENTER);
-		etiquetaTasaProvincial.setBounds(385, 115, 167, 28);
+		etiquetaTasaProvincial.setBounds(372, 115, 180, 28);
 		panelDeControl.add(etiquetaTasaProvincial);
 
-		//campoCostoPorKM = new JLabel(String.valueOf(planificador.getCostoPorKilometro()) + "$");
-		campoCostoPorKM = new JLabel("0");
-		campoCostoPorKM.setBorder(new LineBorder(new Color(0, 0, 0)));
-		campoCostoPorKM.setOpaque(true);
-		campoCostoPorKM.setHorizontalAlignment(SwingConstants.CENTER);
-		campoCostoPorKM.setBounds(21, 145, 119, 23);
-		panelDeControl.add(campoCostoPorKM);
-
-		//campoConexion300KM = new JLabel(String.valueOf(planificador.getPorcentajeDeAumento())+ "$");
-		campoConexion300KM = new JLabel("0");
-		campoConexion300KM.setBorder(new LineBorder(new Color(0, 0, 0)));
-		campoConexion300KM.setOpaque(true);
-		campoConexion300KM.setHorizontalAlignment(SwingConstants.CENTER);
-		campoConexion300KM.setBounds(138, 145, 250, 23);
-		panelDeControl.add(campoConexion300KM);
-
-		//campoTasaInterProvincial = new JLabel(String.valueOf(planificador.getCostoDistintaProvincia())+ "$");
-		campoTasaInterProvincial = new JLabel("0");
-		campoTasaInterProvincial.setBorder(new LineBorder(new Color(0, 0, 0)));
-		campoTasaInterProvincial.setOpaque(true);
-		campoTasaInterProvincial.setHorizontalAlignment(SwingConstants.CENTER);
-		campoTasaInterProvincial.setBounds(385, 145, 167, 23);
-		panelDeControl.add(campoTasaInterProvincial);
-
-		botonCambiarCostos = new JButton("Cambiar costos");
-		botonCambiarCostos.setFont(new Font("Unispace", Font.BOLD, 13));
-		botonCambiarCostos.setBounds(385, 182, 167, 23);
-		botonCambiarCostos.addActionListener(this);
-		panelDeControl.add(botonCambiarCostos);
+		botonIngresarCostos = new JButton("Ingresar costos");
+		botonIngresarCostos.setFont(new Font("Unispace", Font.BOLD, 13));
+		botonIngresarCostos.setBounds(385, 182, 167, 23);
+		botonIngresarCostos.addActionListener(this);
+		panelDeControl.add(botonIngresarCostos);
 //		panelDeControlDeslizable.add(costos);
 	}
 
@@ -251,6 +229,28 @@ public class VentanaPrincipal implements ActionListener {
 	
 
 	private void generarInputs() {
+		
+		campoCostoPorKM = new JTextField();
+		campoCostoPorKM.requestFocus();
+		campoCostoPorKM.setHorizontalAlignment(SwingConstants.CENTER);
+		campoCostoPorKM.setBorder(new LineBorder(new Color(171, 173, 179)));
+		campoCostoPorKM.setBounds(21, 143, 119, 20);
+		panelDeControl.add(campoCostoPorKM);
+		campoCostoPorKM.setColumns(10);
+		
+		campoPorcentajeDeAumento = new JTextField();
+		campoPorcentajeDeAumento.setHorizontalAlignment(SwingConstants.CENTER);
+		campoPorcentajeDeAumento.setBorder(new LineBorder(new Color(171, 173, 179)));
+		campoPorcentajeDeAumento.setColumns(10);
+		campoPorcentajeDeAumento.setBounds(138, 143, 235, 20);
+		panelDeControl.add(campoPorcentajeDeAumento);
+		
+		campoTasaInterProvincial = new JTextField();
+		campoTasaInterProvincial.setHorizontalAlignment(SwingConstants.CENTER);
+		campoTasaInterProvincial.setBorder(new LineBorder(new Color(171, 173, 179)));
+		campoTasaInterProvincial.setColumns(10);
+		campoTasaInterProvincial.setBounds(372, 143, 180, 20);
+		panelDeControl.add(campoTasaInterProvincial);
 
 		JLabel _longitud = new JLabel("Longitud");
 		_longitud.setFont(new Font("Unispace", Font.BOLD, 15));
@@ -260,8 +260,9 @@ public class VentanaPrincipal implements ActionListener {
 		inputLongitud = new JTextField();
 		inputLongitud.setFont(new Font("Unispace", Font.BOLD, 11));
 		inputLongitud.setBounds(325, 112, 109, 20);
-		panelDeCarga.add(inputLongitud);
 		inputLongitud.setColumns(10);
+		panelDeCarga.add(inputLongitud);
+		
 
 		JLabel _latitud = new JLabel("Latitud");
 		_latitud.setBounds(10, 111, 78, 19);
@@ -271,8 +272,9 @@ public class VentanaPrincipal implements ActionListener {
 		inputLatitud = new JTextField();
 		inputLatitud.setFont(new Font("Unispace", Font.BOLD, 11));
 		inputLatitud.setBounds(82, 110, 98, 20);
-		panelDeCarga.add(inputLatitud);
 		inputLatitud.setColumns(10);
+		panelDeCarga.add(inputLatitud);
+		
 
 		JLabel _nombre = new JLabel("Nombre");
 		_nombre.setFont(new Font("Unispace", Font.BOLD, 15));
@@ -282,8 +284,9 @@ public class VentanaPrincipal implements ActionListener {
 		inputNombre = new JTextField();
 		inputNombre.setFont(new Font("Unispace", Font.BOLD, 11));
 		inputNombre.setBounds(82, 63, 98, 20);
-		panelDeCarga.add(inputNombre);
 		inputNombre.setColumns(10);
+		panelDeCarga.add(inputNombre);
+		
 
 		JLabel _provincia = new JLabel("Provincia");
 		_provincia.setFont(new Font("Unispace", Font.BOLD, 15));
@@ -299,6 +302,7 @@ public class VentanaPrincipal implements ActionListener {
 
 	private void generarBotonCarga() {
 		botonCarga = new JButton("Cargar");
+		botonCarga.setEnabled(false);
 		botonCarga.setBounds(10, 163, 121, 19);
 		botonCarga.addActionListener(this);
 		panelDeCarga.add(botonCarga);
@@ -308,6 +312,7 @@ public class VentanaPrincipal implements ActionListener {
 	private void generarBotonConexion() {
 
 		botonGenerarConexiones = new JButton("Generar Conexion");
+		botonGenerarConexiones.setEnabled(false);
 		botonGenerarConexiones.setFont(new Font("Unispace", Font.BOLD, 13));
 		botonGenerarConexiones.setBounds(21, 617, 206, 23);
 		botonGenerarConexiones.addActionListener(this);
@@ -421,13 +426,13 @@ public class VentanaPrincipal implements ActionListener {
 
 	private void mostrarSolucion() {
 		solucion.setText("");
-		solucion.append("Conexiones Telefonicas a construir : (En tramos) \n");
-		solucion.append(logica.darSolucionAGM() + "\n");
+		solucion.append("Conexiones Telefonicas a construir : (En tramos) \n\n");
+		solucion.append(logica.darSolucionAGM() + "\n\n");
 		solucion.append("Solucion basada en el Algoritmo de Prim!");
 		
 	}
 
-	private boolean verificarInputs() {
+	private boolean verificarInputsLocalidad() {
 		if (inputLatitud.getText().isEmpty() || inputLongitud.getText().isEmpty() || inputNombre.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Hay campos vacios. Llenar los campos es obligatorio!", "Advertencia",
 					JOptionPane.WARNING_MESSAGE);
@@ -445,6 +450,37 @@ public class VentanaPrincipal implements ActionListener {
 			return true;
 		}
 	}
+	
+	private boolean verificarInputsCostos() {
+		if ((campoCostoPorKM.getText().equals("0") ||
+			campoPorcentajeDeAumento.getText().equals("0") ||
+			campoTasaInterProvincial.getText().equals("0")) ||
+			campoCostoPorKM.getText().isEmpty() ||
+			campoPorcentajeDeAumento.getText().isEmpty() ||
+			campoTasaInterProvincial.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Campos vacÌos o en 0. Definir los costos es obligatorio!", "Advertencia",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		} 
+		if (campoCostoPorKM.getText().matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+")
+			|| campoPorcentajeDeAumento.getText().matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+")
+			||campoTasaInterProvincial.getText().matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+")) {
+			JOptionPane.showMessageDialog(null,
+						"Solo se admiten numeros para los costos!",
+						"Advertencia", JOptionPane.WARNING_MESSAGE);
+				return false;
+		}
+		if(Double.parseDouble(campoCostoPorKM.getText())<0 ||
+			Double.parseDouble(campoPorcentajeDeAumento.getText())<0 ||
+			Double.parseDouble(campoTasaInterProvincial.getText())<0) {
+			JOptionPane.showMessageDialog(null,
+					"Solo se admiten numeros positivos para los costos!",
+					"Advertencia", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
+		}
+	
 
 	private void limpiarCampos() {
 		inputLatitud.setText(null);
@@ -477,16 +513,14 @@ public class VentanaPrincipal implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == botonCarga) {
-			if (verificarInputs()) {
+			if (verificarInputsLocalidad()) {
 				agregarLocalidad(inputNombre.getText(), listaDeProvincias.getSelectedItem().toString(),
 						Double.parseDouble(inputLatitud.getText()), Double.parseDouble(inputLongitud.getText()));
 				limpiarCampos();
 			}
 		}
 		if (e.getSource() == botonGenerarConexiones) {
-			if (logica.getUbicaciones().size() >= 2) {
-//				botonCarga.setEnabled(false);
-//				botonGenerarConexiones.setEnabled(false);		
+			if (logica.getUbicaciones().size() >= 2) {	
 				mostrarSolucion();
 				dibujarConexiones();
 			} else {
@@ -508,18 +542,20 @@ public class VentanaPrincipal implements ActionListener {
 			}
 		}
 		
-		if(e.getSource()== botonCambiarCostos) {
-			//pasarlo a una funcion
-			String costoPorKM=JOptionPane.showInputDialog(null, "Ingrese el nuevo costo por KM: ","Costo por KM", JOptionPane.PLAIN_MESSAGE);
-			campoCostoPorKM.setText(costoPorKM + "$");
-			String conexion300Km=JOptionPane.showInputDialog(null, "Ingrese el nuevo valor del KM si la conexion es superior a 300 KM: ","Costo por KM mayor a 300 KM", JOptionPane.PLAIN_MESSAGE);
-			campoConexion300KM.setText(conexion300Km + "$");
-			String tasaInterProvincial=JOptionPane.showInputDialog(null, "Ingrese la nueva tasa Inter-Provincial","Tasa InterProvincial", JOptionPane.PLAIN_MESSAGE);
-			campoTasaInterProvincial.setText(tasaInterProvincial + "$");
-			logica.definirCostos(Integer.valueOf(costoPorKM), Integer.valueOf(conexion300Km),Integer.valueOf(tasaInterProvincial));	
+		if(e.getSource()== botonIngresarCostos) {
+			if(verificarInputsCostos()) {
+				logica.definirCostos(Integer.valueOf(campoCostoPorKM.getText()),
+									Integer.valueOf(campoPorcentajeDeAumento.getText()),
+									Integer.valueOf(campoTasaInterProvincial.getText()));
+				JOptionPane.showMessageDialog(null,
+						"Costos ingresados exitosamente!", "Exito", JOptionPane.DEFAULT_OPTION);
+				botonCarga.setEnabled(true);
+				botonGenerarConexiones.setEnabled(true);
+			}
 		}
+		
 	}
-
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
