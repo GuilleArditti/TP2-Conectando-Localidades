@@ -25,7 +25,6 @@ public class LogicaAGM {
 	public LogicaAGM() {
 		ubicaciones = new ArrayList<>();
 		cargarUbicacionesDesdeTXT();
-		System.out.println(ubicaciones2.toString());
 	}
 
 	public Planificador definirCostos(int costoKM, int costoKM300KM, int costoDistintaProvincia) {
