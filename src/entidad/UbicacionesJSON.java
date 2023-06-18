@@ -1,17 +1,30 @@
 package entidad;
 
 import java.util.ArrayList;
-
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class UbicacionesJSON {
-	ArrayList<Ubicacion> ubicaciones;
+public class UbicacionesJSON implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List<Ubicacion> ubicaciones;
+	
+	public UbicacionesJSON() {
+		ubicaciones = new ArrayList<>();
+	}
+	
+	public void agregar(Ubicacion ubicacion) {
+		this.ubicaciones.add(ubicacion);
+	}
 
 	public String generarJSONPretty() {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -42,4 +55,9 @@ public class UbicacionesJSON {
 
         return ret;
     }
+
+	@Override
+	public String toString() {
+		return "UbicacionesJSON [ubicaciones=" + ubicaciones + "]";
+	}
 }
