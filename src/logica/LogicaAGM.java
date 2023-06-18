@@ -37,15 +37,16 @@ public class LogicaAGM {
 	 * Crea un Grafo original con todas las ubicaciones agregadas desde la interfaz.
 	 * Le pasa el Grafo original al Algoritmo de Prim.
 	 * Recibe un Grafo AGM.
-	 * Devuelve un String informando la ruta de menor costo y el costo total.
 	 */
 	
-	public String darSolucionAGM() {
+	public void generarSolucion() {
 		Grafo grafoOrigen = volcarListaAGrafo();
 		agm = algoritmoDePrim(grafoOrigen);
+	}
+	
+	public String generarStringResultado() {
 		int costoTotal = calcularCostoTotal();
-		String solucionTxt = escribirSolucion(costoTotal);
-		return solucionTxt;
+		return escribirSolucion(costoTotal);
 	}
 	
 	public Grafo algoritmoDePrim(Grafo grafo) {
@@ -98,7 +99,7 @@ public class LogicaAGM {
 		
 		for (Arista arista : agm.getAristas())
 			solucionTxt.append(ubicaciones.get(arista.getOrigen()) + " -> "
-					+ ubicaciones.get(arista.getDestino()) + ". Costo: $ " + arista.getPeso() + "\n");
+					+ ubicaciones.get(arista.getDestino()) + ". Costo: $ " + arista.getPeso() + "\n\n");
 		
 		solucionTxt.append("Costo total de las instalaciones: $ " + costoTotal);
 		return solucionTxt.toString();
@@ -132,6 +133,9 @@ public class LogicaAGM {
 	}
 
 	private Grafo volcarListaAGrafo() {
+		if(ubicaciones.size()<2) {
+			throw new RuntimeException("Para generar una conexión debe haber al menos 2 localidades ingresadas!");
+		}
 		Grafo grafo = new Grafo(ubicaciones.size());
 		for (int i = 0; i < grafo.tamano(); i++) {
 			for (int j = 0; j < grafo.tamano(); j++) {
@@ -153,30 +157,34 @@ public class LogicaAGM {
 	    
 	    return agm.getAristas();
 	  }
+
+	/* Método que devuelve las coordenadas correspondientes a la solucion,
+	 * para luego representarlas en el mapa de la interfaz. 
+	 */
 	
-	//Metodo experimental a corregir (grafica ciclos)
-	//pensado para que la interfaz no maneje aristas ni ubicaciones, solo las coordenadas a representar pasadas desde la logica.
-	
-//	public List<Coordinate> solucion(){
-//		List<Coordinate> conjuntoSolucion= new ArrayList<Coordinate>();
-//		List<Ubicacion> ubicaciones = getUbicaciones();
-//	    
-//	    Ubicacion ubiOrigen;
-//	    Ubicacion ubiDestino;
-//	    
-//	    Coordinate coord1;
-//	    Coordinate coord2;
-//	    
-//	    for (Arista arista : getAristasAGM()) {
-//	      ubiOrigen = ubicaciones.get(arista.getOrigen());
-//	      ubiDestino = ubicaciones.get(arista.getDestino());
-//	      
-//	      coord1 = new Coordinate(ubiOrigen.getLatitud(), ubiOrigen.getLongitud());
-//	      coord2 = new Coordinate(ubiDestino.getLatitud(), ubiDestino.getLongitud());
-//	      conjuntoSolucion.add(coord1);
-//	      conjuntoSolucion.add(coord2);
-//	    }
-//	    
-//	   return conjuntoSolucion;
-//	}
+	public ArrayList<ArrayList<Coordinate>> coordenadasSolucion() {
+		ArrayList<ArrayList<Coordinate>> conjuntoSolucion = new ArrayList<ArrayList<Coordinate>>();
+
+		Ubicacion ubiOrigen;
+		Ubicacion ubiDestino;
+
+		Coordinate coord1;
+		Coordinate coord2;
+
+		for (Arista arista : agm.getAristas()) {
+			ubiOrigen = ubicaciones.get(arista.getOrigen());
+			ubiDestino = ubicaciones.get(arista.getDestino());
+
+			coord1 = new Coordinate(ubiOrigen.getLatitud(), ubiOrigen.getLongitud());
+			coord2 = new Coordinate(ubiDestino.getLatitud(), ubiDestino.getLongitud());
+
+			ArrayList<Coordinate> conexion = new ArrayList<Coordinate>();
+			conexion.add(coord1);
+			conexion.add(coord2);
+			conexion.add(coord2);
+
+			conjuntoSolucion.add(conexion);
+		}
+		return conjuntoSolucion;
+	}
 }
