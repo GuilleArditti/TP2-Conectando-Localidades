@@ -32,10 +32,6 @@ public class UbicacionesTest {
 		String esperado = ubicaciones.toString();
 		String obtenido = leerArchivo();
 		assertEquals(esperado, obtenido);
-		
-		/* borrar */
-		System.out.println(esperado);
-		System.out.println(obtenido);
 	}
 
 	/* auxiliares */
