@@ -1,7 +1,13 @@
 package entidad;
 
-public class Ubicacion {
+import java.io.Serializable;
 
+public class Ubicacion implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nombre;
 	private String provincia;
 	private double latitud;
