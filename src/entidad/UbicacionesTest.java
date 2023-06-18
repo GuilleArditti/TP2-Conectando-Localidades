@@ -37,12 +37,12 @@ public class UbicacionesTest {
 	/* auxiliares */
 	private void escribirArchivo() {
 		try {
-			FileOutputStream flujoSalidaArchivo = new FileOutputStream("ubicaciones.txt");
-			ObjectOutputStream flujoSalidaObjeto = new ObjectOutputStream(flujoSalidaArchivo);
-			flujoSalidaObjeto.writeObject(ubicaciones);
-			flujoSalidaObjeto.close();
+			FileOutputStream fos = new FileOutputStream("ubicaciones.txt");
+			ObjectOutputStream out = new ObjectOutputStream(fos);
+			out.writeObject(ubicaciones);
+			out.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("No se pudo escribir el archivo: " + e.getMessage());
 		}
 	}
 	
