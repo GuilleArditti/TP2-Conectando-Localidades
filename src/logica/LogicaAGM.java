@@ -19,10 +19,13 @@ public class LogicaAGM {
 
 	private Planificador planificador;
 	private List<Ubicacion> ubicaciones;
+	private Ubicaciones ubicaciones2;			// persistencia
 	private Grafo agm;
 
 	public LogicaAGM() {
 		ubicaciones = new ArrayList<>();
+		cargarUbicacionesDesdeTXT();
+		System.out.println(ubicaciones2.toString());
 	}
 
 	public Planificador definirCostos(int costoKM, int costoKM300KM, int costoDistintaProvincia) {
@@ -208,8 +211,6 @@ public class LogicaAGM {
 	}
 	
 	public String cargarUbicacionesDesdeTXT() {
-		Ubicaciones ubicaciones2 = null;
-		
 		try {
 			FileInputStream fis = new FileInputStream("ubicaciones.txt");
 			ObjectInputStream in = new ObjectInputStream(fis);
