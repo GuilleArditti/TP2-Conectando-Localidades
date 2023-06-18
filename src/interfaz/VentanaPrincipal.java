@@ -7,13 +7,11 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -47,7 +45,6 @@ public class VentanaPrincipal implements ActionListener {
 	private JMenuItem salir;
 	private JMapViewer mapa;
 	private Dimension tamañoPaneles;
-//	private JLabel fondo;
 	private JPanel panelPrincipal;
 	private JPanel panelMapa;
 	private JPanel panelDeControl;
@@ -59,14 +56,13 @@ public class VentanaPrincipal implements ActionListener {
 	private JTextField inputLatitud;
 	private JTextField inputLongitud;
 	private JTextField inputNombre;
-	private JTextArea solucion;
+	private JTextArea cuadroInformativo;
 	private JButton botonGenerarConexiones;
 	private JButton botonCarga;
 	private JButton botonIngresarCostos;
 	private JComboBox<String> listaDeProvincias;
 	private JList<String> listaNombreyProvincia;
 	private LogicaAGM logica;
-
 	private ArrayList<ArrayList<Coordinate>> conjuntoSolucion;
 
 	public VentanaPrincipal() {
@@ -81,14 +77,6 @@ public class VentanaPrincipal implements ActionListener {
 		generarPanelDeControl();
 	}
 	
-//	private void generarImagenDeFondo() {
-//		fondo= new JLabel();
-//		ImageIcon imageIcon = new ImageIcon("fondo.jpg");
-//        Image image = imageIcon.getImage().getScaledInstance(tamañoPaneles.height, tamañoPaneles.width, Image.SCALE_DEFAULT); // Ajusta el tamaño de la imagen
-//        ImageIcon scaledImageIcon = new ImageIcon(image);
-//        fondo.setIcon(scaledImageIcon);
-//	}
-
 	private void generarFrame() {
 		frame = new JFrame();
 		frame.setTitle("Conectando Localidades");
@@ -126,7 +114,6 @@ public class VentanaPrincipal implements ActionListener {
 		panelMapa.setBackground(new Color(128, 128, 128));
 		panelMapa.setPreferredSize(tamañoPaneles);
 		panelMapa.setMaximumSize(new Dimension(750,750));
-//		panelMapa.add(fondo);
 		panelPrincipal.add(panelMapa);
 		panelMapa.add(mapa);
 	}
@@ -153,7 +140,6 @@ public class VentanaPrincipal implements ActionListener {
 		panelDeControl.setPreferredSize(tamañoPaneles);
 		panelDeControl.setMaximumSize(new Dimension(750,750));
 		panelDeControl.setLayout(null);
-//		panelDeControl.add(fondo);
 		panelPrincipal.add(panelDeControl);
 
 		generarTitulo();
@@ -340,7 +326,7 @@ public class VentanaPrincipal implements ActionListener {
 		modelarListaNombreYProvincia();
 		JScrollPane listaDeslizable = new JScrollPane(listaNombreyProvincia);
 		listaDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		listaDeslizable.setBounds(21, 339, 531, 140);
+		listaDeslizable.setBounds(21, 339, 531, 137);
 		panelDeControl.add(listaDeslizable);
 	}
 
@@ -368,22 +354,22 @@ public class VentanaPrincipal implements ActionListener {
 		_localidadesIngresadas.setBounds(21, 316, 408, 23);
 		panelDeControl.add(_localidadesIngresadas);
 
-		solucion = new JTextArea();
-		solucion.setEditable(false);
-		solucion.setForeground(new Color(255, 255, 255));
-		solucion.setFont(new Font("Unispace", Font.BOLD, 13));
-		solucion.setBackground(new Color(0, 128, 192));
-		JScrollPane Deslizable = new JScrollPane(solucion);
-		Deslizable.setBounds(0, 0, 529, 181);
-		Deslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		Deslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panelInfo.add(Deslizable);
-
 		JLabel _costoConexion = new JLabel("Costos de la conexión:");
 		_costoConexion.setBounds(21, 517, 206, 22);
 		_costoConexion.setForeground(new Color(0, 0, 0));
 		_costoConexion.setFont(new Font("Unispace", Font.BOLD, 15));
 		panelDeControl.add(_costoConexion);
+		
+				cuadroInformativo = new JTextArea();
+				cuadroInformativo.setEditable(false);
+				cuadroInformativo.setForeground(new Color(255, 255, 255));
+				cuadroInformativo.setFont(new Font("Unispace", Font.BOLD, 13));
+				cuadroInformativo.setBackground(new Color(0, 128, 192));
+				JScrollPane Deslizable = new JScrollPane(cuadroInformativo);
+				Deslizable.setBounds(31, 552, 514, 169);
+				panelDeControl.add(Deslizable);
+				Deslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+				Deslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	}
 
 	private void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
@@ -400,13 +386,6 @@ public class VentanaPrincipal implements ActionListener {
 
 	}
 	
-	private void mostrarSolucion() {
-		solucion.setText("");
-		solucion.append("Conexiones Telefonicas a construir : (En tramos) \n\n");
-		solucion.append(logica.darSolucionAGM() + "\n\n");
-		solucion.append("Solucion basada en el Algoritmo de Prim!");
-	}
-
 	private boolean verificarInputsLocalidad() {
 		if (inputLatitud.getText().isEmpty() || inputLongitud.getText().isEmpty() || inputNombre.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Hay campos vacios. Llenar los campos es obligatorio!", "Advertencia",
@@ -455,9 +434,23 @@ public class VentanaPrincipal implements ActionListener {
 		inputLongitud.setText(null);
 		inputNombre.setText(null);
 	}
+
+	private void darSolucion() {
+		logica.generarSolucion();
+		
+		cuadroInformativo.setText("");
+		cuadroInformativo.append("Conexiones Telefonicas a construir : (En tramos) \n\n");
+		cuadroInformativo.append(logica.generarStringResultado() + "\n\n");
+		cuadroInformativo.append("Solucion basada en el Algoritmo de Prim!");
+		
+		dibujarConexiones();
+	}
+
 	
 	private void dibujarConexiones() {
-		conjuntoSolucion=logica.solucion();
+		
+		conjuntoSolucion=logica.coordenadasSolucion();
+		mapa.removeAllMapPolygons();
 		for(int i=0;i<conjuntoSolucion.size();i++) {
 			for(int j=0;j<conjuntoSolucion.get(i).size()-1;j++) {
 				 MapPolygon conexion = new MapPolygonImpl(conjuntoSolucion.get(i).get(j),
@@ -482,9 +475,7 @@ public class VentanaPrincipal implements ActionListener {
 		
 		if (e.getSource() == botonGenerarConexiones) {
 				try {
-					mapa.removeAllMapPolygons();
-					mostrarSolucion();
-					dibujarConexiones();
+					darSolucion();
 					botonGenerarConexiones.setEnabled(false);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null,
@@ -513,7 +504,7 @@ public class VentanaPrincipal implements ActionListener {
 						Integer.valueOf(campoPorcentajeDeAumento.getText()),
 						Integer.valueOf(campoTasaInterProvincial.getText()));
 				JOptionPane.showMessageDialog(null, "Costos ingresados exitosamente!", "Exito",
-						JOptionPane.DEFAULT_OPTION);
+						JOptionPane.INFORMATION_MESSAGE);
 				botonIngresarCostos.setText("Actualizar costos");
 				botonCarga.setEnabled(true);
 				botonGenerarConexiones.setEnabled(true);

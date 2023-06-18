@@ -37,15 +37,16 @@ public class LogicaAGM {
 	 * Crea un Grafo original con todas las ubicaciones agregadas desde la interfaz.
 	 * Le pasa el Grafo original al Algoritmo de Prim.
 	 * Recibe un Grafo AGM.
-	 * Devuelve un String informando la ruta de menor costo y el costo total.
 	 */
 	
-	public String darSolucionAGM() {
+	public void generarSolucion() {
 		Grafo grafoOrigen = volcarListaAGrafo();
 		agm = algoritmoDePrim(grafoOrigen);
+	}
+	
+	public String generarStringResultado() {
 		int costoTotal = calcularCostoTotal();
-		String solucionTxt = escribirSolucion(costoTotal);
-		return solucionTxt;
+		return escribirSolucion(costoTotal);
 	}
 	
 	public Grafo algoritmoDePrim(Grafo grafo) {
@@ -156,8 +157,12 @@ public class LogicaAGM {
 	    
 	    return agm.getAristas();
 	  }
+
+	/* Método que devuelve las coordenadas correspondientes a la solucion,
+	 * para luego representarlas en el mapa de la interfaz. 
+	 */
 	
-	public ArrayList<ArrayList<Coordinate>> solucion() {
+	public ArrayList<ArrayList<Coordinate>> coordenadasSolucion() {
 		ArrayList<ArrayList<Coordinate>> conjuntoSolucion = new ArrayList<ArrayList<Coordinate>>();
 
 		Ubicacion ubiOrigen;
