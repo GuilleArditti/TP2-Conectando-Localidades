@@ -1,5 +1,9 @@
 package logica;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +13,7 @@ import entidad.Arista;
 import entidad.Grafo;
 import entidad.Planificador;
 import entidad.Ubicacion;
+import entidad.Ubicaciones;
 
 public class LogicaAGM {
 
@@ -27,8 +32,11 @@ public class LogicaAGM {
 
 	public void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
 		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
-		if (!ubicaciones.contains(ubicacion))
+		if (!ubicaciones.contains(ubicacion)) {
 			ubicaciones.add(ubicacion);
+			/* guarda en el txt */
+			guardaUbicacionesEnTXT();
+		}
 		else
 			throw new RuntimeException("No se puede agregar esa ubicación porque ya fue agregada anteriormente.");
 	}
@@ -186,5 +194,31 @@ public class LogicaAGM {
 			conjuntoSolucion.add(conexion);
 		}
 		return conjuntoSolucion;
+	}
+	
+	private void guardaUbicacionesEnTXT() {
+		try {
+			FileOutputStream fis = new FileOutputStream("ubicaciones.txt");
+			ObjectOutputStream out = new ObjectOutputStream(fis);
+			out.writeObject(ubicaciones);
+			out.close();
+		} catch (Exception e) {
+			System.out.println("No se pudo escribir el archivo: " + e.getMessage());
+		}
+	}
+	
+	public String cargarUbicacionesDesdeTXT() {
+		Ubicaciones ubicaciones2 = null;
+		
+		try {
+			FileInputStream fis = new FileInputStream("ubicaciones.txt");
+			ObjectInputStream in = new ObjectInputStream(fis);
+			ubicaciones2 = (Ubicaciones) in.readObject();
+			in.close();
+		} catch (Exception e) {
+			System.out.println("No se pudo cargar el archivo: " + e.getMessage());
+		}
+		
+		return ubicaciones2 != null? ubicaciones2.toString() : ""; 
 	}
 }
