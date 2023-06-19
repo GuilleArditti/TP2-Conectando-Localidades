@@ -40,7 +40,7 @@ public class ArchivarUbicacionesTest {
 	/* auxiliares */
 	private void escribirArchivo() {
 		try {
-			FileOutputStream fos = new FileOutputStream("ubicaciones.txt");
+			FileOutputStream fos = new FileOutputStream("ubicacionesTest.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fos);
 			out.writeObject(ubicaciones);
 			out.close();
@@ -53,7 +53,7 @@ public class ArchivarUbicacionesTest {
 		Ubicaciones ubicaciones2 = null;
 		
 		try {
-			FileInputStream fis = new FileInputStream("ubicaciones.txt");
+			FileInputStream fis = new FileInputStream("ubicacionesTest.txt");
 			ObjectInputStream in = new ObjectInputStream(fis);
 			ubicaciones2 = (Ubicaciones) in.readObject();
 			in.close();

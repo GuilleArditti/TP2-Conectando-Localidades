@@ -1,7 +1,6 @@
 package entidad;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.io.Serializable;
 
 public class Ubicaciones implements Serializable {
@@ -9,18 +8,14 @@ public class Ubicaciones implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private List<Ubicacion> ubicaciones;
+	private HashSet<Ubicacion> ubicaciones;
 	
 	public Ubicaciones() {
-		ubicaciones = new ArrayList<>();
+		ubicaciones = new HashSet<Ubicacion>();
 	}
 	
 	public void agregar(Ubicacion ubicacion) {
 		this.ubicaciones.add(ubicacion);
-	}
-	
-	public Ubicacion getById(int i) {
-		return ubicaciones.get(i);
 	}
 
 	@Override
@@ -30,5 +25,9 @@ public class Ubicaciones implements Serializable {
 	
 	public int tamanio() {
 		return ubicaciones.size();
+	}
+	
+	public HashSet<Ubicacion> getUbicaciones(){
+		return this.ubicaciones;
 	}
 }

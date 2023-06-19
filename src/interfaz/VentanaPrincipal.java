@@ -34,9 +34,11 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
+
+import entidad.Ubicacion;
 import logica.Logica;
 
-public class VentanaPrincipal implements ActionListener {
+public class VentanaPrincipal implements ActionListener{
 
 	private JFrame frame;
 	private JMenuBar barraMenu;
@@ -60,8 +62,11 @@ public class VentanaPrincipal implements ActionListener {
 	private JButton botonGenerarConexiones;
 	private JButton botonCarga;
 	private JButton botonIngresarCostos;
+	private JButton botonCargarConocida;
+	private JButton botonEliminar;
 	private JComboBox<String> listaDeProvincias;
-	private JList<String> listaNombreyProvincia;
+	private JList<Ubicacion> listaDeUbicacionesIngresadas;
+	private JList<Ubicacion> historialDeUbicaciones;
 	private Logica logica;
 	private ArrayList<ArrayList<Coordinate>> conjuntoSolucion;
 
@@ -145,9 +150,11 @@ public class VentanaPrincipal implements ActionListener {
 		generarTitulo();
 		mostrarCostos();
 		generarPanelDeCarga();
-		generarListaNombreYProvincia();
-		generarBotonConexion();
+		generarListaDeUbicacionesIngresadas();
+		generarListaDeUbicacionesConocidas();
+		generarBotones();
 		generarPanelInfo();
+		
 	}
 
 	private void generarTitulo() {
@@ -210,9 +217,10 @@ public class VentanaPrincipal implements ActionListener {
 		panelDeCarga = new JPanel();
 		panelDeCarga.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelDeCarga.setBackground(new Color(64, 128, 128));
-		panelDeCarga.setBounds(22, 157, 530, 150);
+		panelDeCarga.setBounds(22, 157, 530, 127);
 		panelDeCarga.setLayout(null);
 		panelDeControl.add(panelDeCarga);
+		
 
 		generarComboBox();
 		generarInputs();
@@ -230,7 +238,7 @@ public class VentanaPrincipal implements ActionListener {
 			listaDeProvincias.addItem(provincias[i]);
 		}
 		listaDeProvincias.setFont(new Font("Unispace", Font.BOLD, 11));
-		listaDeProvincias.setBounds(325, 44, 171, 22);
+		listaDeProvincias.setBounds(325, 33, 171, 22);
 		panelDeCarga.add(listaDeProvincias);
 	}
 
@@ -259,131 +267,237 @@ public class VentanaPrincipal implements ActionListener {
 
 		JLabel _longitud = new JLabel("Longitud");
 		_longitud.setFont(new Font("Unispace", Font.BOLD, 15));
-		_longitud.setBounds(222, 78, 78, 19);
+		_longitud.setBounds(222, 60, 78, 19);
 		panelDeCarga.add(_longitud);
 
 		inputLongitud = new JTextField();
 		inputLongitud.setFont(new Font("Unispace", Font.BOLD, 11));
-		inputLongitud.setBounds(325, 77, 109, 20);
+		inputLongitud.setBounds(325, 61, 109, 20);
 		inputLongitud.setColumns(10);
 		panelDeCarga.add(inputLongitud);
 
 		JLabel _latitud = new JLabel("Latitud");
-		_latitud.setBounds(10, 78, 78, 19);
+		_latitud.setBounds(10, 65, 78, 19);
 		panelDeCarga.add(_latitud);
 		_latitud.setFont(new Font("Unispace", Font.BOLD, 15));
 
 		inputLatitud = new JTextField();
 		inputLatitud.setFont(new Font("Unispace", Font.BOLD, 11));
-		inputLatitud.setBounds(82, 79, 98, 20);
+		inputLatitud.setBounds(82, 61, 98, 20);
 		inputLatitud.setColumns(10);
 		panelDeCarga.add(inputLatitud);
 
 		JLabel _nombre = new JLabel("Nombre");
 		_nombre.setFont(new Font("Unispace", Font.BOLD, 15));
-		_nombre.setBounds(10, 46, 78, 14);
+		_nombre.setBounds(10, 35, 78, 14);
 		panelDeCarga.add(_nombre);
 
 		inputNombre = new JTextField();
 		inputNombre.setFont(new Font("Unispace", Font.BOLD, 11));
-		inputNombre.setBounds(82, 45, 98, 20);
+		inputNombre.setBounds(82, 34, 98, 20);
 		inputNombre.setColumns(10);
 		panelDeCarga.add(inputNombre);
 
 		JLabel _provincia = new JLabel("Provincia");
 		_provincia.setFont(new Font("Unispace", Font.BOLD, 15));
-		_provincia.setBounds(222, 45, 81, 16);
+		_provincia.setBounds(222, 34, 81, 16);
 		panelDeCarga.add(_provincia);
 
 		JLabel _ingresarLocalidad = new JLabel("Ingresar Localidad");
-		_ingresarLocalidad.setFont(new Font("Unispace", Font.BOLD, 17));
-		_ingresarLocalidad.setBounds(10, 11, 231, 19);
+		_ingresarLocalidad.setFont(new Font("Unispace", Font.BOLD, 16));
+		_ingresarLocalidad.setBounds(10, 0, 231, 22);
 		panelDeCarga.add(_ingresarLocalidad);
 	}
 
 	private void generarBotonCarga() {
 		botonCarga = new JButton("Cargar");
 		botonCarga.setEnabled(false);
-		botonCarga.setBounds(10, 123, 121, 19);
+		botonCarga.setBounds(10, 97, 121, 19);
 		botonCarga.addActionListener(this);
 		panelDeCarga.add(botonCarga);
 		botonCarga.setFont(new Font("Unispace", Font.BOLD, 13));
 	}
 
-	private void generarBotonConexion() {
+	private void generarBotones() {
+		
+		botonCargarConocida = new JButton("Cargar");
+		botonCargarConocida.setFont(new Font("Unispace", Font.BOLD, 13));
+		botonCargarConocida.setEnabled(false);
+		botonCargarConocida.addActionListener(this);
+		botonCargarConocida.setBounds(494, 463, 93, 23);
+		panelDeControl.add(botonCargarConocida);
+		
+		botonEliminar = new JButton("Eliminar");
+		botonEliminar.setFont(new Font("Unispace", Font.BOLD, 13));
+		botonEliminar.setEnabled(false);
+		botonEliminar.addActionListener(this);
+		botonEliminar.setBounds(21, 464, 119, 23);
+		panelDeControl.add(botonEliminar);
+		
 		botonGenerarConexiones = new JButton("Generar Conexion");
 		botonGenerarConexiones.setEnabled(false);
 		botonGenerarConexiones.setFont(new Font("Unispace", Font.BOLD, 13));
-		botonGenerarConexiones.setBounds(21, 483, 206, 23);
+		botonGenerarConexiones.setBounds(207, 495, 206, 23);
 		botonGenerarConexiones.addActionListener(this);
+		botonGenerarConexiones.setToolTipText("Genera las conexiones en el mapa en base a las localidades ingresadas");
 		panelDeControl.add(botonGenerarConexiones);
 	}
-	private void generarListaNombreYProvincia() {
-		listaNombreyProvincia = new JList<String>();
-		listaNombreyProvincia.setBorder(new LineBorder(new Color(0, 0, 0)));
-		listaNombreyProvincia.setBackground(new Color(192, 192, 192));
-		listaNombreyProvincia.setFont(new Font("Unispace", Font.BOLD, 11));
-		modelarListaNombreYProvincia();
-		JScrollPane listaDeslizable = new JScrollPane(listaNombreyProvincia);
+	private void generarListaDeUbicacionesIngresadas() {
+		JLabel _localidadesIngresadas = new JLabel("Localidades ingresadas:");
+		_localidadesIngresadas.setFont(new Font("Unispace", Font.BOLD, 15));
+		_localidadesIngresadas.setBounds(21, 295, 278, 23);
+		panelDeControl.add(_localidadesIngresadas);
+		
+		listaDeUbicacionesIngresadas = new JList<Ubicacion>();
+		listaDeUbicacionesIngresadas.setBorder(new LineBorder(new Color(0, 0, 0)));
+		listaDeUbicacionesIngresadas.setBackground(new Color(192, 192, 192));
+		listaDeUbicacionesIngresadas.setFont(new Font("Unispace", Font.BOLD, 11));
+		modelarListaDeUbicacionesIngresadas();
+		JScrollPane listaDeslizable = new JScrollPane(listaDeUbicacionesIngresadas);
 		listaDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		listaDeslizable.setBounds(21, 339, 531, 137);
+		listaDeslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		listaDeslizable.setBounds(21, 321, 278, 137);
 		panelDeControl.add(listaDeslizable);
 	}
+	
+	private void generarListaDeUbicacionesConocidas() {
+		JLabel _localidadesConocidas = new JLabel("Localidades conocidas:");
+		_localidadesConocidas.setFont(new Font("Unispace", Font.BOLD, 15));
+		_localidadesConocidas.setBounds(309, 295, 278, 23);
+		panelDeControl.add(_localidadesConocidas);
+		
+		historialDeUbicaciones = new JList<Ubicacion>();
+		historialDeUbicaciones.setBorder(new LineBorder(new Color(0, 0, 0)));
+		historialDeUbicaciones.setBackground(new Color(192, 192, 192));
+		historialDeUbicaciones.setFont(new Font("Unispace", Font.BOLD, 11));
+		modelarHistorialDeUbicaciones();
+		JScrollPane listaConocidasDeslizable = new JScrollPane(historialDeUbicaciones);
+		listaConocidasDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		listaConocidasDeslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		listaConocidasDeslizable.setBounds(309, 321, 278, 137);
+		cargarHistorialDeUbicaciones();
+		panelDeControl.add(listaConocidasDeslizable);
+	}
+	
+	private DefaultListModel<Ubicacion> modelarHistorialDeUbicaciones() {
+		DefaultListModel<Ubicacion> modelo = new DefaultListModel<>();
+		historialDeUbicaciones.setModel(modelo);
+		return modelo;
+		
+	}
 
-	private DefaultListModel<String> modelarListaNombreYProvincia() {
-		DefaultListModel<String> modelo = new DefaultListModel<>();
-		listaNombreyProvincia.setModel(modelo);
+	private DefaultListModel<Ubicacion> cargarHistorialDeUbicaciones() {
+		ArrayList<Ubicacion> localidadesConocidas= logica.getHistorialDeUbicaciones();
+		DefaultListModel<Ubicacion> modelo = (DefaultListModel<Ubicacion>) historialDeUbicaciones.getModel();
+		for(Ubicacion ubicacion: localidadesConocidas) {
+				modelo.addElement(ubicacion);
+		}
 		return modelo;
 	}
 
-	private DefaultListModel<String> agregarNombreYProvinciaEnLista(String nombre, String provincia) {
-		DefaultListModel<String> modelo = (DefaultListModel<String>) listaNombreyProvincia.getModel();
-		modelo.addElement(nombre + " - " + provincia);
+	private DefaultListModel<Ubicacion> modelarListaDeUbicacionesIngresadas() {
+		DefaultListModel<Ubicacion> modelo = new DefaultListModel<>();
+		listaDeUbicacionesIngresadas.setModel(modelo);
+		return modelo;
+	}
+
+	private DefaultListModel<Ubicacion> mostrarUbicacionIngresada(Ubicacion ubicacion) {
+		DefaultListModel<Ubicacion> modelo = (DefaultListModel<Ubicacion>) listaDeUbicacionesIngresadas.getModel();
+		modelo.addElement(ubicacion);
+		return modelo;
+	}
+	
+	private DefaultListModel<Ubicacion> eliminarUbicacionDeLaLista(Ubicacion ubicacion){
+		DefaultListModel<Ubicacion> modelo = (DefaultListModel<Ubicacion>) listaDeUbicacionesIngresadas.getModel();
+		modelo.removeElement(ubicacion);
 		return modelo;
 	}
 
 	private void generarPanelInfo() {
 		panelInfo = new JPanel();
 		panelInfo.setBackground(new Color(0, 128, 192));
-		panelInfo.setBounds(23, 544, 529, 181);
+		panelInfo.setBounds(23, 552, 529, 180);
 		panelInfo.setLayout(null);
 		panelDeControl.add(panelInfo);
 
-		JLabel _localidadesIngresadas = new JLabel("Localidades ingresadas:");
-		_localidadesIngresadas.setFont(new Font("Unispace", Font.BOLD, 15));
-		_localidadesIngresadas.setBounds(21, 316, 408, 23);
-		panelDeControl.add(_localidadesIngresadas);
-
 		JLabel _costoConexion = new JLabel("Costos de la conexión:");
-		_costoConexion.setBounds(21, 517, 206, 22);
+		_costoConexion.setBounds(21, 529, 206, 22);
 		_costoConexion.setForeground(new Color(0, 0, 0));
 		_costoConexion.setFont(new Font("Unispace", Font.BOLD, 15));
 		panelDeControl.add(_costoConexion);
-		
-				cuadroInformativo = new JTextArea();
-				cuadroInformativo.setEditable(false);
-				cuadroInformativo.setForeground(new Color(255, 255, 255));
-				cuadroInformativo.setFont(new Font("Unispace", Font.BOLD, 13));
-				cuadroInformativo.setBackground(new Color(0, 128, 192));
-				JScrollPane Deslizable = new JScrollPane(cuadroInformativo);
-				Deslizable.setBounds(31, 552, 514, 169);
-				panelDeControl.add(Deslizable);
-				Deslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-				Deslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		cuadroInformativo = new JTextArea();
+		cuadroInformativo.setEditable(false);
+		cuadroInformativo.setForeground(new Color(255, 255, 255));
+		cuadroInformativo.setFont(new Font("Unispace", Font.BOLD, 13));
+		cuadroInformativo.setBackground(new Color(0, 128, 192));
+		JScrollPane Deslizable = new JScrollPane(cuadroInformativo);
+		Deslizable.setBounds(31, 552, 514, 169);
+		panelDeControl.add(Deslizable);
+		Deslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		Deslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				
 	}
 
+//	private void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
+//		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
+//		try {
+//			logica.agregarUbicacion(nombre, provincia, latitud, longitud);
+//			MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
+//			marcador.getStyle().setBackColor(Color.red);
+//			marcador.getStyle().setColor(Color.RED);
+//			mapa.addMapMarker(marcador);
+//			mostrarUbicacionIngresada(nombre + ", " + provincia);
+//		} catch (Exception e) {
+//			JOptionPane.showMessageDialog(null, e.getMessage(), "Advertencia", JOptionPane.OK_OPTION);
+//		}
+//
+//	}
+	
 	private void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
+		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
 		try {
-			logica.agregarUbicacion(nombre, provincia, latitud, longitud);
+			logica.agregarUbicacion(ubicacion);
 			MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
 			marcador.getStyle().setBackColor(Color.red);
 			marcador.getStyle().setColor(Color.RED);
 			mapa.addMapMarker(marcador);
-			agregarNombreYProvinciaEnLista(nombre, provincia);
+			mostrarUbicacionIngresada(ubicacion);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Advertencia", JOptionPane.OK_OPTION);
 		}
 
+	}
+	
+	private void agregarUbicacionConocida(Ubicacion ubicacion) {
+		
+		try {
+			logica.ingresarUbicacionConocida(ubicacion);
+			mostrarUbicacionIngresada(ubicacion);
+			MapMarker marcador = new MapMarkerDot(new Coordinate(ubicacion.getLatitud(), ubicacion.getLongitud()));
+			marcador.getStyle().setBackColor(Color.red);
+			marcador.getStyle().setColor(Color.RED);
+			mapa.addMapMarker(marcador);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null,
+					e.getMessage(), "Mensaje",
+					JOptionPane.OK_OPTION);
+		}
+	}
+	
+	private void eliminarUbicacion(Ubicacion ubicacion) {
+		logica.eliminarUbicacion(ubicacion);
+		eliminarUbicacionDeLaLista(ubicacion);
+		for(MapMarker marcador: mapa.getMapMarkerList()) {
+			if(ubicacion.getLatitud()==marcador.getLat() && ubicacion.getLongitud()==marcador.getLon()) {
+				mapa.removeMapMarker(marcador);
+				mapa.removeAllMapPolygons();
+				break;
+				
+			}
+			
+		}
+		
 	}
 	
 	private boolean verificarInputsLocalidad() {
@@ -412,13 +526,15 @@ public class VentanaPrincipal implements ActionListener {
 					"Advertencia", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-		if (campoCostoPorKM.getText().getClass().equals(String.class)
-			|| campoPorcentajeDeAumento.getText().getClass().equals(String.class)
-			|| campoTasaInterProvincial.getText().getClass().equals(String.class)) {
-			JOptionPane.showMessageDialog(null, "Solo se admiten numeros para los costos!", "Advertencia",
-					JOptionPane.WARNING_MESSAGE);
-			return false;
-		}
+		
+//		if (campoCostoPorKM.getText().getClass().equals(String.class)
+//			|| campoPorcentajeDeAumento.getText().getClass().equals(String.class)
+//			|| campoTasaInterProvincial.getText().getClass().equals(String.class)) {
+//			JOptionPane.showMessageDialog(null, "Solo se admiten numeros para los costos!", "Advertencia",
+//					JOptionPane.WARNING_MESSAGE);
+//			return false;
+//		}
+		
 		if (Double.parseDouble(campoCostoPorKM.getText()) < 0
 				|| Double.parseDouble(campoPorcentajeDeAumento.getText()) < 0
 				|| Double.parseDouble(campoTasaInterProvincial.getText()) < 0) {
@@ -437,20 +553,17 @@ public class VentanaPrincipal implements ActionListener {
 
 	private void darSolucion() {
 		logica.generarSolucion();
-		
 		cuadroInformativo.setText("");
 		cuadroInformativo.append("Conexiones Telefonicas a construir : (En tramos) \n\n");
 		cuadroInformativo.append(logica.generarStringResultado() + "\n\n");
 		cuadroInformativo.append("Solucion basada en el Algoritmo de Prim!");
-		
 		dibujarConexiones();
 	}
 
 	
 	private void dibujarConexiones() {
-		
-		conjuntoSolucion=logica.coordenadasSolucion();
 		mapa.removeAllMapPolygons();
+		conjuntoSolucion=logica.coordenadasSolucion();
 		for(int i=0;i<conjuntoSolucion.size();i++) {
 			for(int j=0;j<conjuntoSolucion.get(i).size()-1;j++) {
 				 MapPolygon conexion = new MapPolygonImpl(conjuntoSolucion.get(i).get(j),
@@ -464,13 +577,41 @@ public class VentanaPrincipal implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		if (e.getSource() == botonIngresarCostos) {
+			if (verificarInputsCostos()) {
+				logica.definirCostos(Integer.valueOf(campoCostoPorKM.getText()),
+						Integer.valueOf(campoPorcentajeDeAumento.getText()),
+						Integer.valueOf(campoTasaInterProvincial.getText()));
+				JOptionPane.showMessageDialog(null, "Costos ingresados exitosamente!", "Exito",
+						JOptionPane.INFORMATION_MESSAGE);
+				botonIngresarCostos.setText("Actualizar costos");
+				botonCarga.setEnabled(true);
+				botonCargarConocida.setEnabled(true);
+				botonGenerarConexiones.setEnabled(true);
+			}
+		}
+		
 		if (e.getSource() == botonCarga) {
 			if (verificarInputsLocalidad()) {
 				agregarUbicacion(inputNombre.getText(), listaDeProvincias.getSelectedItem().toString(),
 						Double.parseDouble(inputLatitud.getText()), Double.parseDouble(inputLongitud.getText()));
 				limpiarCampos();
+				botonEliminar.setEnabled(true);
 				botonGenerarConexiones.setEnabled(true);
 			}
+		}
+		
+		if(e.getSource()==botonCargarConocida) {
+					if(!historialDeUbicaciones.isSelectionEmpty()) {
+						agregarUbicacionConocida(historialDeUbicaciones.getSelectedValue());
+						botonEliminar.setEnabled(true);
+						botonGenerarConexiones.setEnabled(true);
+					}
+					else {
+						JOptionPane.showMessageDialog(null,
+								"Debe seleccionar una ubicacion conocida de la lista para ingresarla", "Mensaje",
+								JOptionPane.OK_OPTION);
+					}
 		}
 		
 		if (e.getSource() == botonGenerarConexiones) {
@@ -497,21 +638,20 @@ public class VentanaPrincipal implements ActionListener {
 				VentanaPrincipal nuevo = new VentanaPrincipal();
 			}
 		}
-
-		if (e.getSource() == botonIngresarCostos) {
-			if (verificarInputsCostos()) {
-				logica.definirCostos(Integer.valueOf(campoCostoPorKM.getText()),
-						Integer.valueOf(campoPorcentajeDeAumento.getText()),
-						Integer.valueOf(campoTasaInterProvincial.getText()));
-				JOptionPane.showMessageDialog(null, "Costos ingresados exitosamente!", "Exito",
-						JOptionPane.INFORMATION_MESSAGE);
-				botonIngresarCostos.setText("Actualizar costos");
-				botonCarga.setEnabled(true);
-				botonGenerarConexiones.setEnabled(true);
+		
+		if(e.getSource()==botonEliminar) {
+			if(!listaDeUbicacionesIngresadas.isSelectionEmpty()) {
+			eliminarUbicacion(listaDeUbicacionesIngresadas.getSelectedValue());
+			botonGenerarConexiones.setEnabled(true);
+			}
+			else {
+				JOptionPane.showMessageDialog(null,
+						"Debe seleccionar una ubicacion de la lista para eliminarla", "Mensaje",
+						JOptionPane.OK_OPTION);
 			}
 		}
 	}
-
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

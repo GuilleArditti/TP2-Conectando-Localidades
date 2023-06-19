@@ -23,6 +23,7 @@ public class Logica {
 	private Grafo agm;
 
 	public Logica() {
+		persistenciaDeUbicaciones= new Ubicaciones();
 		ubicaciones = new ArrayList<>();
 		cargarUbicacionesDesdeTXT();
 	}
@@ -32,14 +33,29 @@ public class Logica {
 		return planificador;
 	}
 
-	public void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
-		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
+//	public void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
+//		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
+//		if (!ubicaciones.contains(ubicacion)) {
+//			ubicaciones.add(ubicacion);
+//			persistenciaDeUbicaciones.agregar(ubicacion);
+//			guardaUbicacionesEnTXT();
+//		}
+//		else
+//			throw new RuntimeException("No se puede agregar esa ubicación porque ya fue agregada anteriormente.");
+//	}
+	
+	public void agregarUbicacion(Ubicacion ubicacion) {
 		if (!ubicaciones.contains(ubicacion)) {
 			ubicaciones.add(ubicacion);
+			persistenciaDeUbicaciones.agregar(ubicacion);
 			guardaUbicacionesEnTXT();
 		}
 		else
 			throw new RuntimeException("No se puede agregar esa ubicación porque ya fue agregada anteriormente.");
+	}
+	
+	public void eliminarUbicacion(Ubicacion ubicacion) {
+		ubicaciones.remove(ubicacion);
 	}
 	
 	/*
@@ -198,10 +214,11 @@ public class Logica {
 	}
 	
 	private void guardaUbicacionesEnTXT() {
+		
 		try {
 			FileOutputStream fis = new FileOutputStream("ubicaciones.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fis);
-			out.writeObject(ubicaciones);
+			out.writeObject(persistenciaDeUbicaciones);
 			out.close();
 		} catch (Exception e) {
 			System.out.println("No se pudo escribir el archivo: " + e.getMessage());
@@ -219,5 +236,22 @@ public class Logica {
 		}
 		
 		return persistenciaDeUbicaciones != null? persistenciaDeUbicaciones.toString() : ""; 
+	}
+	
+	public ArrayList<Ubicacion> getHistorialDeUbicaciones(){
+		ArrayList<Ubicacion> ubicacionesConocidas= new ArrayList<Ubicacion>();
+		for(Ubicacion ubicacion: persistenciaDeUbicaciones.getUbicaciones()) {
+			ubicacionesConocidas.add(ubicacion);
+		}
+		return ubicacionesConocidas;
+	}
+	
+	public void ingresarUbicacionConocida(Ubicacion ubicacionConocida) {
+		for(Ubicacion ubicacion: persistenciaDeUbicaciones.getUbicaciones()) {
+			if(ubicacion.equals(ubicacionConocida)) {
+				agregarUbicacion(ubicacion);
+			}
+		}
+		
 	}
 }
