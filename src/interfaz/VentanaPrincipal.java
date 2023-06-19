@@ -34,7 +34,7 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
-import logica.LogicaAGM;
+import logica.Logica;
 
 public class VentanaPrincipal implements ActionListener {
 
@@ -62,7 +62,7 @@ public class VentanaPrincipal implements ActionListener {
 	private JButton botonIngresarCostos;
 	private JComboBox<String> listaDeProvincias;
 	private JList<String> listaNombreyProvincia;
-	private LogicaAGM logica;
+	private Logica logica;
 	private ArrayList<ArrayList<Coordinate>> conjuntoSolucion;
 
 	public VentanaPrincipal() {
@@ -70,7 +70,7 @@ public class VentanaPrincipal implements ActionListener {
 	}
 
 	private void initialize() {
-		logica = new LogicaAGM();
+		logica = new Logica();
 		generarFrame();
 		crearMenu();
 		generarPanelMapa();
@@ -412,9 +412,9 @@ public class VentanaPrincipal implements ActionListener {
 					"Advertencia", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-		if (campoCostoPorKM.getText().matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+")
-				|| campoPorcentajeDeAumento.getText().matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+")
-				|| campoTasaInterProvincial.getText().matches("[a-zA-Z·ÈÌÛ˙¡…Õ”⁄Ò— ]+")) {
+		if (campoCostoPorKM.getText().getClass().equals(String.class)
+			|| campoPorcentajeDeAumento.getText().getClass().equals(String.class)
+			|| campoTasaInterProvincial.getText().getClass().equals(String.class)) {
 			JOptionPane.showMessageDialog(null, "Solo se admiten numeros para los costos!", "Advertencia",
 					JOptionPane.WARNING_MESSAGE);
 			return false;

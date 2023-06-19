@@ -10,7 +10,8 @@ import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 
-public class UbicacionesTest {
+public class ArchivarUbicacionesTest {
+	
 	private Ubicacion ubi1, ubi2, ubi3;
 	private Ubicaciones ubicaciones;
 

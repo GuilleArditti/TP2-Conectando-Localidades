@@ -1,17 +1,17 @@
-package test;
+package logica;
 
 import static org.junit.Assert.*;
 
 import java.util.List;
 
 import org.junit.Test;
-import logica.LogicaAGM;
+
 import entidad.Grafo;
 import entidad.Arista;
 
-public class LogicaAGMTest {
+public class LogicaTest {
 
-	private LogicaAGM logica = new LogicaAGM();;
+	private Logica logica = new Logica();;
 	private Grafo grafo = new Grafo(5);
 
 	@Test

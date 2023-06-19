@@ -15,14 +15,14 @@ import entidad.Planificador;
 import entidad.Ubicacion;
 import entidad.Ubicaciones;
 
-public class LogicaAGM {
+public class Logica {
 
 	private Planificador planificador;
 	private List<Ubicacion> ubicaciones;
-	private Ubicaciones ubicaciones2;			// persistencia
+	private Ubicaciones persistenciaDeUbicaciones;			
 	private Grafo agm;
 
-	public LogicaAGM() {
+	public Logica() {
 		ubicaciones = new ArrayList<>();
 		cargarUbicacionesDesdeTXT();
 	}
@@ -36,7 +36,6 @@ public class LogicaAGM {
 		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
 		if (!ubicaciones.contains(ubicacion)) {
 			ubicaciones.add(ubicacion);
-			/* guarda en el txt */
 			guardaUbicacionesEnTXT();
 		}
 		else
@@ -213,12 +212,12 @@ public class LogicaAGM {
 		try {
 			FileInputStream fis = new FileInputStream("ubicaciones.txt");
 			ObjectInputStream in = new ObjectInputStream(fis);
-			ubicaciones2 = (Ubicaciones) in.readObject();
+			persistenciaDeUbicaciones = (Ubicaciones) in.readObject();
 			in.close();
 		} catch (Exception e) {
 			System.out.println("No se pudo cargar el archivo: " + e.getMessage());
 		}
 		
-		return ubicaciones2 != null? ubicaciones2.toString() : ""; 
+		return persistenciaDeUbicaciones != null? persistenciaDeUbicaciones.toString() : ""; 
 	}
 }

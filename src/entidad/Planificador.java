@@ -20,7 +20,6 @@ public class Planificador {
 		this.costoPorKilometro = costoPorKilometro;
 	}
 
-
 	public int getPorcentajeDeAumento() {
 		return porcentajeDeAumento;
 	}
