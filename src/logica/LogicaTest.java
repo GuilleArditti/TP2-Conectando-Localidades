@@ -3,7 +3,6 @@ package logica;
 import static org.junit.Assert.*;
 
 import java.util.List;
-
 import org.junit.Test;
 
 import entidad.Grafo;
@@ -56,4 +55,5 @@ public class LogicaTest {
 		grafo.agregarArista(2, 4, 4);
 		grafo.agregarArista(3, 4, 7);
 	}
+	
 }

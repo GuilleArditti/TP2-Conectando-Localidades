@@ -1,13 +1,11 @@
 package entidad;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
 import java.io.Serializable;
 
 public class Ubicaciones implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private Set<Ubicacion> ubicaciones;
 	

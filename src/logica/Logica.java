@@ -166,17 +166,6 @@ public class Logica {
 		}
 		return grafo;
 	}
-	
-	protected List<Ubicacion> getUbicaciones() {
-		return this.ubicaciones;
-	}
-	
-	protected List<Arista> getAristasAGM() {
-	    if (agm == null)
-	      throw new RuntimeException("Todavia no se ha generado el Arbol");
-	    
-	    return agm.getAristas();
-	  }
 
 	/* Método que devuelve las coordenadas correspondientes a la solucion,
 	 * para luego representarlas en el mapa de la interfaz. 
@@ -209,7 +198,6 @@ public class Logica {
 	}
 	
 	private void guardaUbicacionesEnTXT() {
-
 		try {
 			FileOutputStream fis = new FileOutputStream("ubicaciones.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fis);
@@ -220,7 +208,7 @@ public class Logica {
 		}
 	}
 	
-	public String cargarUbicacionesDesdeTXT() {
+	private String cargarUbicacionesDesdeTXT() {
 		try {
 			FileInputStream fis = new FileInputStream("ubicaciones.txt");
 			ObjectInputStream in = new ObjectInputStream(fis);
@@ -228,8 +216,7 @@ public class Logica {
 			in.close();
 		} catch (Exception e) {
 			System.out.println("No se pudo cargar el archivo: " + e.getMessage());
-		}
-		
+		}		
 		return persistenciaDeUbicaciones != null? persistenciaDeUbicaciones.toString() : ""; 
 	}
 	
