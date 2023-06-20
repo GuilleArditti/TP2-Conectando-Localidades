@@ -438,12 +438,11 @@ public class VentanaPrincipal implements ActionListener{
 		Deslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 				
 	}
-		
-	private void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
-		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
+	
+	private void agregarUbicacion(Ubicacion ubicacion) {
 		try {
 			logica.agregarUbicacion(ubicacion);
-			MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
+			MapMarker marcador = new MapMarkerDot(new Coordinate(ubicacion.getLatitud(), ubicacion.getLongitud()));
 			marcador.getStyle().setBackColor(Color.red);
 			marcador.getStyle().setColor(Color.RED);
 			mapa.addMapMarker(marcador);
@@ -452,22 +451,7 @@ public class VentanaPrincipal implements ActionListener{
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Advertencia", JOptionPane.OK_OPTION);
 		}
 
-	}
-	
-	private void agregarUbicacionConocida(Ubicacion ubicacion) {
-		try {
-			logica.ingresarUbicacionConocida(ubicacion);
-			mostrarUbicacionIngresada(ubicacion);
-			MapMarker marcador = new MapMarkerDot(new Coordinate(ubicacion.getLatitud(), ubicacion.getLongitud()));
-			marcador.getStyle().setBackColor(Color.red);
-			marcador.getStyle().setColor(Color.RED);
-			mapa.addMapMarker(marcador);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null,
-					e.getMessage(), "Mensaje",
-					JOptionPane.OK_OPTION);
-		}
-	}
+	}		
 	
 	private void eliminarUbicacion(Ubicacion ubicacion) {
 		logica.eliminarUbicacion(ubicacion);
@@ -477,11 +461,8 @@ public class VentanaPrincipal implements ActionListener{
 				mapa.removeMapMarker(marcador);
 				mapa.removeAllMapPolygons();
 				break;
-				
-			}
-			
+			}	
 		}
-		
 	}
 	
 	private boolean verificarInputsLocalidad() {
@@ -571,12 +552,12 @@ public class VentanaPrincipal implements ActionListener{
 					JOptionPane.showMessageDialog(null, "Solo se admiten valores numéricos en los campos", "Error",
 							JOptionPane.WARNING_MESSAGE);
 				}
-			}
-		
+		}
+	
 		if (e.getSource() == botonCarga) {
 			if (verificarInputsLocalidad()) {
-				agregarUbicacion(inputNombre.getText(), listaDeProvincias.getSelectedItem().toString(),
-						Double.parseDouble(inputLatitud.getText()), Double.parseDouble(inputLongitud.getText()));
+				agregarUbicacion(new Ubicacion(inputNombre.getText(), listaDeProvincias.getSelectedItem().toString(),
+						Double.parseDouble(inputLatitud.getText()), Double.parseDouble(inputLongitud.getText())));
 				limpiarCampos();
 				botonEliminar.setEnabled(true);
 				botonGenerarConexiones.setEnabled(true);
@@ -585,7 +566,7 @@ public class VentanaPrincipal implements ActionListener{
 		
 		if(e.getSource()==botonCargarConocida) {
 					if(!historialDeUbicaciones.isSelectionEmpty()) {
-						agregarUbicacionConocida(historialDeUbicaciones.getSelectedValue());
+						agregarUbicacion(historialDeUbicaciones.getSelectedValue());
 						botonEliminar.setEnabled(true);
 						botonGenerarConexiones.setEnabled(true);
 					}
