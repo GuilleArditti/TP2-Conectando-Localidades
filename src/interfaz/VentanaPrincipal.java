@@ -361,22 +361,22 @@ public class VentanaPrincipal implements ActionListener{
 	}
 	
 	private void generarListaDeUbicacionesConocidas() {
-		JLabel _localidadesConocidas = new JLabel("Localidades conocidas:");
-		_localidadesConocidas.setFont(new Font("Unispace", Font.BOLD, 15));
-		_localidadesConocidas.setBounds(309, 295, 278, 23);
-		panelDeControl.add(_localidadesConocidas);
+		JLabel _ubicacionesConocidas = new JLabel("Localidades conocidas:");
+		_ubicacionesConocidas.setFont(new Font("Unispace", Font.BOLD, 15));
+		_ubicacionesConocidas.setBounds(309, 295, 278, 23);
+		panelDeControl.add(_ubicacionesConocidas);
 		
 		historialDeUbicaciones = new JList<Ubicacion>();
 		historialDeUbicaciones.setBorder(new LineBorder(new Color(0, 0, 0)));
 		historialDeUbicaciones.setBackground(new Color(192, 192, 192));
 		historialDeUbicaciones.setFont(new Font("Unispace", Font.BOLD, 11));
 		modelarHistorialDeUbicaciones();
-		JScrollPane listaConocidasDeslizable = new JScrollPane(historialDeUbicaciones);
-		listaConocidasDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		listaConocidasDeslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		listaConocidasDeslizable.setBounds(309, 321, 278, 137);
+		JScrollPane historialDeUbicacionesDeslizable = new JScrollPane(historialDeUbicaciones);
+		historialDeUbicacionesDeslizable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		historialDeUbicacionesDeslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		historialDeUbicacionesDeslizable.setBounds(309, 321, 278, 137);
 		cargarHistorialDeUbicaciones();
-		panelDeControl.add(listaConocidasDeslizable);
+		panelDeControl.add(historialDeUbicacionesDeslizable);
 	}
 	
 	private DefaultListModel<Ubicacion> modelarHistorialDeUbicaciones() {
@@ -438,22 +438,7 @@ public class VentanaPrincipal implements ActionListener{
 		Deslizable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 				
 	}
-
-//	private void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
-//		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
-//		try {
-//			logica.agregarUbicacion(nombre, provincia, latitud, longitud);
-//			MapMarker marcador = new MapMarkerDot(new Coordinate(latitud, longitud));
-//			marcador.getStyle().setBackColor(Color.red);
-//			marcador.getStyle().setColor(Color.RED);
-//			mapa.addMapMarker(marcador);
-//			mostrarUbicacionIngresada(nombre + ", " + provincia);
-//		} catch (Exception e) {
-//			JOptionPane.showMessageDialog(null, e.getMessage(), "Advertencia", JOptionPane.OK_OPTION);
-//		}
-//
-//	}
-	
+		
 	private void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
 		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
 		try {
@@ -470,7 +455,6 @@ public class VentanaPrincipal implements ActionListener{
 	}
 	
 	private void agregarUbicacionConocida(Ubicacion ubicacion) {
-		
 		try {
 			logica.ingresarUbicacionConocida(ubicacion);
 			mostrarUbicacionIngresada(ubicacion);
@@ -526,19 +510,11 @@ public class VentanaPrincipal implements ActionListener{
 					"Advertencia", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-		
-//		if (campoCostoPorKM.getText().getClass().equals(String.class)
-//			|| campoPorcentajeDeAumento.getText().getClass().equals(String.class)
-//			|| campoTasaInterProvincial.getText().getClass().equals(String.class)) {
-//			JOptionPane.showMessageDialog(null, "Solo se admiten numeros para los costos!", "Advertencia",
-//					JOptionPane.WARNING_MESSAGE);
-//			return false;
-//		}
-		
-		if (Double.parseDouble(campoCostoPorKM.getText()) < 0
-				|| Double.parseDouble(campoPorcentajeDeAumento.getText()) < 0
-				|| Double.parseDouble(campoTasaInterProvincial.getText()) < 0) {
-			JOptionPane.showMessageDialog(null, "Solo se admiten numeros positivos para los costos!", "Advertencia",
+			
+		if (Integer.parseInt(campoCostoPorKM.getText()) < 0
+				|| Integer.parseInt(campoPorcentajeDeAumento.getText()) < 0
+				|| Integer.parseInt(campoTasaInterProvincial.getText()) < 0) {
+			JOptionPane.showMessageDialog(null, "Solo se admiten numeros positivos!", "Advertencia",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
@@ -578,18 +554,24 @@ public class VentanaPrincipal implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == botonIngresarCostos) {
+			try {
 			if (verificarInputsCostos()) {
-				logica.definirCostos(Integer.valueOf(campoCostoPorKM.getText()),
-						Integer.valueOf(campoPorcentajeDeAumento.getText()),
-						Integer.valueOf(campoTasaInterProvincial.getText()));
-				JOptionPane.showMessageDialog(null, "Costos ingresados exitosamente!", "Exito",
-						JOptionPane.INFORMATION_MESSAGE);
-				botonIngresarCostos.setText("Actualizar costos");
-				botonCarga.setEnabled(true);
-				botonCargarConocida.setEnabled(true);
-				botonGenerarConexiones.setEnabled(true);
+				
+					logica.definirCostos(Integer.valueOf(campoCostoPorKM.getText()),
+							Integer.valueOf(campoPorcentajeDeAumento.getText()),
+							Integer.valueOf(campoTasaInterProvincial.getText()));
+					JOptionPane.showMessageDialog(null, "Costos ingresados exitosamente!", "Exito",
+							JOptionPane.INFORMATION_MESSAGE);
+					botonIngresarCostos.setText("Actualizar costos");
+					botonCarga.setEnabled(true);
+					botonCargarConocida.setEnabled(true);
+					botonGenerarConexiones.setEnabled(true);
+				}
+			}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Solo se admiten valores numéricos en los campos", "Error",
+							JOptionPane.WARNING_MESSAGE);
+				}
 			}
-		}
 		
 		if (e.getSource() == botonCarga) {
 			if (verificarInputsLocalidad()) {

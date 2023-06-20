@@ -32,17 +32,6 @@ public class Logica {
 		planificador= new Planificador(costoKM,costoKM300KM,costoDistintaProvincia);
 		return planificador;
 	}
-
-//	public void agregarUbicacion(String nombre, String provincia, double latitud, double longitud) {
-//		Ubicacion ubicacion= new Ubicacion(nombre, provincia, latitud, longitud);
-//		if (!ubicaciones.contains(ubicacion)) {
-//			ubicaciones.add(ubicacion);
-//			persistenciaDeUbicaciones.agregar(ubicacion);
-//			guardaUbicacionesEnTXT();
-//		}
-//		else
-//			throw new RuntimeException("No se puede agregar esa ubicación porque ya fue agregada anteriormente.");
-//	}
 	
 	public void agregarUbicacion(Ubicacion ubicacion) {
 		if (!ubicaciones.contains(ubicacion)) {
@@ -251,7 +240,7 @@ public class Logica {
 			if(ubicacion.equals(ubicacionConocida)) {
 				agregarUbicacion(ubicacion);
 			}
-		}
-		
+		}		
 	}
+
 }
