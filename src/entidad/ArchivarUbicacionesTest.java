@@ -2,6 +2,7 @@ package entidad;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.io.File;
 
 public class ArchivarUbicacionesTest {
 	
@@ -62,6 +64,12 @@ public class ArchivarUbicacionesTest {
 		}
 		
 		return ubicaciones2 != null? ubicaciones2.toString() : ""; 
+	}
+	
+	@After
+	public void eliminarArchivo() {
+		 File archivo = new File("ubicacionesTest.txt");
+		 archivo.delete();
 	}
 
 }

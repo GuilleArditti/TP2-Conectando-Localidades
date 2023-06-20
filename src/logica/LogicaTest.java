@@ -46,7 +46,7 @@ public class LogicaTest {
 		Grafo grafoVacio = new Grafo(0);
 		logica.algoritmoDePrim(grafoVacio).tamano();
 	}
-
+	
 	private void agregarAristas() {
 		grafo.agregarArista(0, 1, 2);
 		grafo.agregarArista(0, 3, 5);

@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
@@ -33,7 +34,7 @@ public class Logica {
 		return planificador;
 	}
 	
-	public List<Ubicacion> agregarUbicacion(Ubicacion ubicacion) {	
+	public List<Ubicacion> agregarUbicacion(Ubicacion ubicacion) {
 		if (!ubicaciones.contains(ubicacion) && !persistenciaDeUbicaciones.getUbicaciones().contains(ubicacion)) {
 			ubicaciones.add(ubicacion);
 			persistenciaDeUbicaciones.agregar(ubicacion);
@@ -45,7 +46,7 @@ public class Logica {
 			return ubicaciones;
 		}
 		else
-			throw new RuntimeException("No se puede agregar esa ubicación porque ya fue agregada anteriormente.");
+			throw new RuntimeException("No se puede cargar " + ubicacion.toString() + " de nuevo. Ya se encuentra ingresada en la lista.");
 	}
 	
 	public void eliminarUbicacion(Ubicacion ubicacion) {
@@ -68,7 +69,7 @@ public class Logica {
 		return escribirSolucion(costoTotal);
 	}
 	
-	public Grafo algoritmoDePrim(Grafo grafo) {
+	protected Grafo algoritmoDePrim(Grafo grafo) {
 		if (grafo == null)
 			throw new IllegalArgumentException("El Grafo es null.");
 		if (grafo.tamano() == 0)
@@ -166,11 +167,11 @@ public class Logica {
 		return grafo;
 	}
 	
-	public List<Ubicacion> getUbicaciones() {
+	protected List<Ubicacion> getUbicaciones() {
 		return this.ubicaciones;
 	}
 	
-	public List<Arista> getAristasAGM() {
+	protected List<Arista> getAristasAGM() {
 	    if (agm == null)
 	      throw new RuntimeException("Todavia no se ha generado el Arbol");
 	    
@@ -208,7 +209,7 @@ public class Logica {
 	}
 	
 	private void guardaUbicacionesEnTXT() {
-		
+
 		try {
 			FileOutputStream fis = new FileOutputStream("ubicaciones.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fis);
@@ -232,12 +233,8 @@ public class Logica {
 		return persistenciaDeUbicaciones != null? persistenciaDeUbicaciones.toString() : ""; 
 	}
 	
-	public ArrayList<Ubicacion> getHistorialDeUbicaciones(){
-		ArrayList<Ubicacion> ubicacionesConocidas= new ArrayList<Ubicacion>();
-		for(Ubicacion ubicacion: persistenciaDeUbicaciones.getUbicaciones()) {
-			ubicacionesConocidas.add(ubicacion);
-		}
-		return ubicacionesConocidas;
+	public Set<Ubicacion> getHistorialDeUbicaciones(){
+		return persistenciaDeUbicaciones.getUbicaciones();
 	}
 	
 }

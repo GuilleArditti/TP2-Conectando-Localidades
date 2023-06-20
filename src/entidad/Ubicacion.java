@@ -50,6 +50,19 @@ public class Ubicacion implements Serializable {
 		return nombre + " (" +  provincia + ")";
 	}
 
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(latitud);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(longitud);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -59,7 +72,11 @@ public class Ubicacion implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Ubicacion other = (Ubicacion) obj;
-		return other.latitud==latitud && other.longitud==longitud;
+		if (Double.doubleToLongBits(latitud) != Double.doubleToLongBits(other.latitud))
+			return false;
+		if (Double.doubleToLongBits(longitud) != Double.doubleToLongBits(other.longitud))
+			return false;
+		return true;
 	}
 		
 }

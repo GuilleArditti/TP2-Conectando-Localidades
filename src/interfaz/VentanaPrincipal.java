@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -387,7 +388,7 @@ public class VentanaPrincipal implements ActionListener{
 	}
 
 	private DefaultListModel<Ubicacion> cargarHistorialDeUbicaciones() {
-		ArrayList<Ubicacion> localidadesConocidas= logica.getHistorialDeUbicaciones();
+		Set<Ubicacion> localidadesConocidas= logica.getHistorialDeUbicaciones();
 		DefaultListModel<Ubicacion> modelo = (DefaultListModel<Ubicacion>) historialDeUbicaciones.getModel();
 		for(Ubicacion ubicacion: localidadesConocidas) {
 				modelo.addElement(ubicacion);
