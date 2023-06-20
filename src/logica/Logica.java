@@ -33,16 +33,16 @@ public class Logica {
 		return planificador;
 	}
 	
-	public boolean agregarUbicacion(Ubicacion ubicacion) {	
+	public List<Ubicacion> agregarUbicacion(Ubicacion ubicacion) {	
 		if (!ubicaciones.contains(ubicacion) && !persistenciaDeUbicaciones.getUbicaciones().contains(ubicacion)) {
 			ubicaciones.add(ubicacion);
 			persistenciaDeUbicaciones.agregar(ubicacion);
 			guardaUbicacionesEnTXT();
-			return true;
+			return ubicaciones;
 		}
 		if(!ubicaciones.contains(ubicacion) && persistenciaDeUbicaciones.getUbicaciones().contains(ubicacion)) {
 			ubicaciones.add(ubicacion);
-			return true;
+			return ubicaciones;
 		}
 		else
 			throw new RuntimeException("No se puede agregar esa ubicación porque ya fue agregada anteriormente.");
